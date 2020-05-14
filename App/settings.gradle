@@ -1,0 +1,2 @@
+rootProject.name='GeoAgenda'
+include ':app'
