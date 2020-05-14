@@ -1,4 +1,4 @@
-package com.example.geoagenda.ui.home
+package com.example.geoagenda.ui.logout
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 
-class HomeFragment : Fragment() {
+class LogoutFragment  : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var logoutViewModel: LogoutViewModel
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        logoutViewModel =
+            ViewModelProviders.of(this).get(LogoutViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         val textView: TextView = root.findViewById(R.id.text_logout)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        logoutViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
