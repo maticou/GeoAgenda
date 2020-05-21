@@ -7,10 +7,17 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    // Para el menu
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_logOut">Log out</string>
+
+    // Para el login
+    <string name="email_text_field">Correo</string>
+    <string name="password_text_field">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="signup_button">Registrarse</string>
 
     <string name="home_second">Home Second</string>
 </resources>
