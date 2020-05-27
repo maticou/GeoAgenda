@@ -46,4 +46,10 @@
         android:name="com.example.geoagenda.ui.logout.LogoutFragment"
         android:label="@string/menu_logOut"
         tools:layout="@layout/fragment_logout" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.geoagenda.ui.settings.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
