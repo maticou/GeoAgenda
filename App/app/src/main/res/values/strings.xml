@@ -24,4 +24,13 @@
     <string name="string">Nombre</string>
     <string name="string2">Nueva Ubicación</string>
     <string name="string_agregar">Agregar</string>
+
+    //Para crear usuario
+    <string name="create_user_title">Crear cuenta de usuario</string>
+    <string name="string_user_name">Nombre</string>
+    <string name="string_user_surname">Apellido</string>
+    <string name="create_email_text_field">Correo</string>
+    <string name="create_password_text_field">Contraseña</string>
+    <string name="repeat_password_text_field">Repetir contraseña</string>
+    <string name="register_button">Crear cuenta</string>
 </resources>
