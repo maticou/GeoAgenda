@@ -25,4 +25,8 @@
     <string name="signup_button">Registrarse</string>
 
     <string name="home_second">Home Second</string>
+    <string name = "google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
+    <string name="string">Nombre</string>
+    <string name="string2">Nueva Ubicación</string>
+    <string name="string_agregar">Agregar</string>
 </resources>
