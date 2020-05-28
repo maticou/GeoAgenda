@@ -22,10 +22,7 @@ class LogoutFragment  : Fragment() {
         logoutViewModel =
             ViewModelProviders.of(this).get(LogoutViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_logout)
-        logoutViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+
         return root
     }
 }
