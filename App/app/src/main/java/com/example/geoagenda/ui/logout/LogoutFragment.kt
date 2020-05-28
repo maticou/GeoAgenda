@@ -21,7 +21,7 @@ class LogoutFragment  : Fragment() {
     ): View? {
         logoutViewModel =
             ViewModelProviders.of(this).get(LogoutViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val root = inflater.inflate(R.layout.fragment_logout, container, false)
 
         return root
     }
