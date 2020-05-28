@@ -47,4 +47,7 @@
     <string name="repeat_password_text_field">Repetir contraseña</string>
     <string name="register_button">Crear cuenta</string>
 
+    //Para crear lugar
+    <string name="create_location">Agregar lugar</string>
+
 </resources>
