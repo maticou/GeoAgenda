@@ -1,4 +1,4 @@
-package com.example.geoagenda.ui.logout
+package com.example.geoagenda.ui.mygroups
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,18 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 
-class LogoutFragment  : Fragment() {
 
-    private lateinit var logoutViewModel: LogoutViewModel
+class MygroupsFragment : Fragment() {
+
+    private lateinit var mygroupsViewModel: MygroupsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        logoutViewModel =
-            ViewModelProviders.of(this).get(LogoutViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_logout, container, false)
+        mygroupsViewModel =
+            ViewModelProviders.of(this).get(MygroupsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_mygroups, container, false)
 
         return root
     }

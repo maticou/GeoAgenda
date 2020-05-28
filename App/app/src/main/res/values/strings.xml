@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GeoAgenda</string>
+    <string name="app_name">Mementos</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -7,10 +7,47 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    // Para el menu
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_logOut">Log out</string>
+    <string name="menu_logOut">Cerrar Sesión</string>
+    <string name="menu_settings">Configuraciones</string>
+    <string name="menu_categories">Categorías</string>
+    <string name="menu_rec">Recordatorios</string>
+    <string name="menu_locations">Mis ubicaciones</string>
+    <string name="menu_groups">Mis grupos</string>
+
+    // Para el login
+    <string name="email_text_field">Correo</string>
+    <string name="password_text_field">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="signup_button">Registrarse</string>
 
     <string name="home_second">Home Second</string>
+    <string name = "google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
+    <string name="string">Nombre</string>
+    <string name="string2">Nueva Ubicación</string>
+    <string name="string_agregar">Agregar</string>
+
+    //Para la interfaz de recordatorios
+    <string name="reminder_text1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula efficitur nunc non tincidunt. Ut at pharetra libero, ac volutpat ipsum. Integer non hendrerit dui. Suspendisse vehicula turpis id purus ullamcorper aliquet vitae ut nisl. Quisque accumsan malesuada velit ut consectetur. Suspendisse sit amet libero facilisis, lacinia leo nec, finibus eros. Aenean odio erat, pellentesque eget odio sed, congue congue sapien. Aliquam nisi neque, mattis id magna et, consectetur varius neque. Pellentesque dignissim dui at ipsum tincidunt rhoncus. Etiam posuere suscipit felis, in sollicitudin urna facilisis mattis. Vivamus malesuada eros velit, tincidunt hendrerit tortor consectetur at. Ut condimentum elit diam, at congue sapien aliquet nec. Aliquam euismod finibus ipsum. Nullam vestibulum aliquam ipsum, nec mattis nulla facilisis vitae. Donec at faucibus tortor. Quisque venenatis tincidunt libero, ac fringilla turpis porttitor vitae. </string>
+    <string name="reminder_text2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula efficitur nunc non tincidunt. Ut at pharetra libero, ac volutpat ipsum. Integer non hendrerit dui. Suspendisse vehicula turpis id purus ullamcorper aliquet vitae ut nisl. Quisque accumsan malesuada velit ut consectetur. Suspendisse sit amet libero facilisis, lacinia leo nec, finibus eros. Aenean odio erat, pellentesque eget odio sed, congue congue sapien. Aliquam nisi neque, mattis id magna et, consectetur varius neque. Pellentesque dignissim dui at ipsum tincidunt rhoncus. Etiam posuere suscipit felis, in sollicitudin urna facilisis mattis. Vivamus malesuada eros velit, tincidunt hendrerit tortor consectetur at. Ut condimentum elit diam, at congue sapien aliquet nec. Aliquam euismod finibus ipsum. Nullam vestibulum aliquam ipsum, nec mattis nulla facilisis vitae. Donec at faucibus tortor. Quisque venenatis tincidunt libero, ac fringilla turpis porttitor vitae. </string>
+    <string name="reminder_image_text">Imagen recordatorio</string>
+    <string name="location_icon_text">Icono de ubicacion</string>
+    <string name="alarm_icon_text">Icono de alarma</string>
+    <string name="voice_icon_text">Icono mensaje voz</string>
+
+    //Para crear usuario
+    <string name="create_user_title">Crear cuenta de usuario</string>
+    <string name="string_user_name">Nombre</string>
+    <string name="string_user_surname">Apellido</string>
+    <string name="create_email_text_field">Correo</string>
+    <string name="create_password_text_field">Contraseña</string>
+    <string name="repeat_password_text_field">Repetir contraseña</string>
+    <string name="register_button">Crear cuenta</string>
+
+    //Para crear lugar
+    <string name="create_location">Agregar lugar</string>
+
 </resources>
