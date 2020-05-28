@@ -22,7 +22,7 @@ class MygroupsFragment : Fragment() {
     ): View? {
         mygroupsViewModel =
             ViewModelProviders.of(this).get(MygroupsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        val root = inflater.inflate(R.layout.fragment_mygroups, container, false)
 
         return root
     }
