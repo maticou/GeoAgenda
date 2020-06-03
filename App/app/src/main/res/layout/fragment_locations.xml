@@ -10,14 +10,12 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="325dp"
         android:layout_height="191dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="19dp"
-        android:layout_marginBottom="94dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintVertical_bias="0.216"
         tools:context=".AddLocationActivity" />
 
     <TextView
@@ -29,7 +27,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.253" />
@@ -40,9 +38,9 @@
         android:layout_height="wrap_content"
         android:text="@string/string_agregar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/map2"
+        app:layout_constraintStart_toStartOf="@+id/map2"
+        app:layout_constraintTop_toBottomOf="@+id/map2" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -50,16 +48,16 @@
         android:layout_height="54dp"
         android:layout_marginTop="51dp"
         android:layout_marginEnd="19dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.646"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="322dp"
             android:layout_height="43dp"
-            android:layout_marginTop="17dp"
-            android:layout_marginEnd="14dp"
             android:hint="@string/string"
             android:inputType="textShortMessage" />
     </com.google.android.material.textfield.TextInputLayout>
