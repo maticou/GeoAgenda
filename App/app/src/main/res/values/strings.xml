@@ -15,8 +15,16 @@
     <string name="menu_settings">Configuraciones</string>
     <string name="menu_categories">Categorías</string>
     <string name="menu_rec">Recordatorios</string>
-    <string name="menu_locations">Mis ubicaciones</string>
-    <string name="menu_groups">Mis grupos</string>
+    //submenu ubicaciones
+    <string name="menu_locations_title">Ubicaciones</string>
+    <string name="menu_locations_saved">Mis ubicaciones</string>
+    <string name="menu_locations_new">Nueva ubicacion</string>
+    <string name="menu_locations_edit">Editar ubicacion</string>
+    //submenu grupos
+    <string name="menu_groups_title">Grupos</string>
+    <string name="menu_groups_saved">Mis grupos</string>
+    <string name="menu_groups_new">Nuevo grupo</string>
+    <string name="menu_groups_edit">Editar grupo</string>
 
     // Para el login
     <string name="email_text_field">Correo</string>

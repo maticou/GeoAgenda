@@ -1,13 +1,13 @@
-package com.example.geoagenda.ui.mygroups
-
+package com.example.geoagenda.ui.addgroup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MygroupsViewModel :  ViewModel() {
+
+class AddGroupViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
-        value = "Mis grupos"
+        value = "This is add group Fragment"
     }
     val text: LiveData<String> = _text
 }

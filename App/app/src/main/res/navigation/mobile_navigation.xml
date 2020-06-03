@@ -13,7 +13,6 @@
 
     </fragment>
 
-
     <fragment
         android:id="@+id/nav_categories"
         android:name="com.example.geoagenda.ui.categories.CategoriesFragment"
@@ -21,10 +20,21 @@
         tools:layout="@layout/fragment_categories" />
 
     <fragment
-        android:id="@+id/nav_locations"
+        android:id="@+id/nav_locations_new"
         android:name="com.example.geoagenda.ui.locations.LocationsFragment"
-        android:label="@string/menu_locations"
+        android:label="@string/menu_locations_new"
         tools:layout="@layout/fragment_locations" />
+
+    <fragment
+        android:id="@+id/nav_locations_saved"
+        android:name="com.example.geoagenda.ui.addlocation.AddLocationFragment"
+        android:label="@string/menu_locations_saved"
+        tools:layout="@layout/fragment_addlocation"/>
+    <fragment
+        android:id="@+id/nav_locations_edit"
+        android:name="com.example.geoagenda.ui.editlocation.EditLocationFragment"
+        android:label="@string/menu_locations_edit"
+        tools:layout="@layout/fragment_editlocation"/>
 
     <fragment
         android:id="@+id/nav_logOut"
@@ -41,7 +51,19 @@
     <fragment
         android:id="@+id/nav_groups"
         android:name="com.example.geoagenda.ui.mygroups.MygroupsFragment"
-        android:label="@string/menu_groups"
+        android:label="@string/menu_groups_saved"
         tools:layout="@layout/fragment_mygroups"/>
+
+    <fragment
+        android:id="@+id/nav_groups_new"
+        android:name="com.example.geoagenda.ui.addgroup.AddGroupFragment"
+        android:label="@string/menu_groups_new"
+        tools:layout="@layout/fragment_addgroup"/>
+    <fragment
+        android:id="@+id/nav_groups_edit"
+        android:name="com.example.geoagenda.ui.editgroup.EditGroupFragment"
+        android:label="@string/menu_groups_edit"
+        tools:layout="@layout/fragment_editgroup"/>
+
 
 </navigation>
