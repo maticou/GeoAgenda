@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"
+           android:id="@+id/groups_1">
         <item
             android:id="@+id/nav_rec"
             android:icon="@drawable/ic_menu_rec_black_24dp"
@@ -13,14 +13,49 @@
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_menu_categories_black_24dp"
             android:title="@string/menu_categories" />
-        <item
-            android:id="@+id/nav_locations"
-            android:icon="@drawable/ic_menu_locations_black_24dp"
-            android:title="@string/menu_locations" />
-        <item
-            android:id="@+id/nav_groups"
-            android:icon="@drawable/ic_menu_groups_black_24dp"
-            android:title="@string/menu_groups" />
+    </group>
+    <item android:title="@string/menu_locations_title">
+       <menu>
+            <group android:checkableBehavior="single"
+                   android:id="@+id/groups_2">
+                <item
+                    android:id="@+id/nav_locations_saved"
+                    android:icon="@drawable/ic_menu_locations_black_24dp"
+                    android:title="@string/menu_locations_saved" />
+
+                <item
+                    android:id="@+id/nav_locations_new"
+                    android:icon="@drawable/ic_menu_add_location_black_24dp"
+                    android:title="@string/menu_locations_new" />
+                <item
+                    android:id="@+id/nav_locations_edit"
+                    android:icon="@drawable/ic_menu_edit_location_black_24dp"
+                    android:title="@string/menu_locations_edit" />
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/menu_groups_title">
+        <menu>
+            <group android:checkableBehavior="single"
+                android:id="@+id/groups_3">
+                <item
+                    android:id="@+id/nav_groups"
+                    android:icon="@drawable/ic_menu_groups_black_24dp"
+                    android:title="@string/menu_groups_saved" />
+                <item
+                    android:id="@+id/nav_groups_new"
+                    android:icon="@drawable/ic_menu_group_add_black_24dp"
+                    android:title="@string/menu_groups_new" />
+                <item
+                    android:id="@+id/nav_groups_edit"
+                    android:icon="@drawable/ic_menu_edit_black_24dp"
+                    android:title="@string/menu_groups_edit" />
+            </group>
+        </menu>
+    </item>
+    <group android:checkableBehavior="single"
+        android:id="@+id/groups_4">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings_black_24dp"
@@ -29,6 +64,6 @@
             android:id="@+id/nav_logOut"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="@string/menu_logOut" />
-
     </group>
+
 </menu>
