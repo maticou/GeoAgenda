@@ -33,7 +33,7 @@
     <string name="signup_button">Registrarse</string>
 
     <string name="home_second">Home Second</string>
-    <string name = "google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
+    <string name="google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
     <string name="string">Nombre</string>
     <string name="string2">Nueva Ubicación</string>
     <string name="string_agregar">Agregar</string>
@@ -57,5 +57,7 @@
 
     //Para crear lugar
     <string name="create_location">Agregar lugar</string>
+    <string name="title_activity_location">Map</string>
+    <string name="title_activity_add_location">Map</string>
 
 </resources>
