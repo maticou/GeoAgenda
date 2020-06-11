@@ -59,5 +59,11 @@
     <string name="create_location">Agregar lugar</string>
     <string name="title_activity_location">Map</string>
     <string name="title_activity_add_location">Map</string>
+    <string name="nombre">Nombre</string>
+    <string name="imagen_de_grupo">Imagen de grupo</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="agregar_imagen">Agregar imagen</string>
+    <string name="crear_grupo">Crear grupo</string>
+    <string name="escoger_imagen">Escoger imagen</string>
 
 </resources>
