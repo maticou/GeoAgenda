@@ -28,7 +28,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        btnImg.setOnClickListener(this);
+        //btnImg.setOnClickListener(this);
         addGroupViewModel =
             ViewModelProviders.of(this).get(AddGroupViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addgroup, container, false)
