@@ -31,6 +31,8 @@
     <string name="password_text_field">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
     <string name="signup_button">Registrarse</string>
+    <string name="login_error">La autenticación falló</string>
+    <string name="logout">Cerrar sesión</string>
 
     <string name="home_second">Home Second</string>
     <string name="google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
