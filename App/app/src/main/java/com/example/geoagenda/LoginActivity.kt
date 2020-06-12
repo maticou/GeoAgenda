@@ -2,7 +2,6 @@ package com.example.geoagenda
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -74,8 +73,9 @@ class LoginActivity : AppCompatActivity() {
         startActivity(homeIntent)
     }
 
-    public fun SuccessLogout() {
-        Toast.makeText(this, "Method called From Fragment", Toast.LENGTH_LONG).show()
+    // Despues de cerrar sesion no se permite volver a la actividad anterior
+    override fun onBackPressed() {
+
     }
 }
 
