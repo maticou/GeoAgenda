@@ -1,7 +1,10 @@
 package com.example.geoagenda
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -22,6 +25,12 @@ class LoginActivity : AppCompatActivity() {
 
         // Funcion para login
         setup()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Verificar sesion
+        session()
     }
 
     private fun setup() {
@@ -70,12 +79,24 @@ class LoginActivity : AppCompatActivity() {
             putExtra( "email", email)
             putExtra( "provider", provider.name)
         }
+
         startActivity(homeIntent)
     }
 
     // Despues de cerrar sesion no se permite volver a la actividad anterior
     override fun onBackPressed() {
 
+    }
+
+
+    private fun session() {
+        val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val email: String? = prefs.getString("email", null)
+        val provider: String? = prefs.getString("provider", null)
+
+        if(email != null && provider != null) {
+            showHome(email, ProviderType.valueOf(provider))
+        }
     }
 }
 
