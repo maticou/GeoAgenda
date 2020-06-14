@@ -33,6 +33,9 @@
     <string name="signup_button">Registrarse</string>
     <string name="login_error">La autenticación falló</string>
     <string name="logout">Cerrar sesión</string>
+    <string name="error">Error</string>
+    <string name="no_empty_email">El correo no puede estar vacío</string>
+    <string name="no_empty_password">La contraseña no puede estar vacía</string>
     <string name="prefs_file">com.example.geoagenda.PREFERENCE_FILE_KEY</string>
 
     <string name="home_second">Home Second</string>

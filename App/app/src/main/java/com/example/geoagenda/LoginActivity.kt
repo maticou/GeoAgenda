@@ -3,11 +3,8 @@ package com.example.geoagenda
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
@@ -42,10 +39,11 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             title = "Autenticación"
 
-            if (emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()) {
+            if (emailEditText.text?.isNotEmpty()!! && passwordEditText.text?.isNotEmpty()!!) {
 
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
+
 
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
@@ -55,9 +53,13 @@ class LoginActivity : AppCompatActivity() {
                             showHome(email, ProviderType.BASIC)
                         } else {
                             // If sign in fails, display a message to the user.
-                            showAlert()
+                            emailEditTextLayout.error = getString(R.string.error)
+                            passwordEditTextLayout.error = getString(R.string.error)
                         }
                     }
+            } else {
+                emailEditTextLayout.error = getString(R.string.no_empty_email)
+                passwordEditTextLayout.error = getString(R.string.no_empty_password)
             }
         }
         createButton.setOnClickListener {
@@ -65,14 +67,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAlert() {
-        val builder = AlertDialog.Builder( this)
-        builder.setTitle("Error")
-        builder.setMessage(R.string.login_error)
-        builder.setPositiveButton( "Aceptar", null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-    }
 
     private fun showHome(email: String, provider: ProviderType) {
         val homeIntent = Intent( this, MainActivity::class.java).apply {
@@ -87,7 +81,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onBackPressed() {
 
     }
-
 
     private fun session() {
         val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)

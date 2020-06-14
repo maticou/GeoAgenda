@@ -1,18 +1,12 @@
 package com.example.geoagenda.ui.addgroup
 
-import android.content.pm.PackageManager
-import android.content.Intent
-import android.Manifest
 import android.app.Activity
-import android.os.Build
-import android.os.Build.*
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
@@ -33,6 +27,10 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
             ViewModelProviders.of(this).get(AddGroupViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_addgroup, container, false)
 
+        // TODOS LOS ELEMENTOS QUE SE UTILIZAN CON
+        // METODOS COMO setOnClickListener SE DEBEN
+        // INICIALIZAR PRIMERO COMO APARECE A CONTINUACIÓN.
+        val btnImg: Button = root.findViewById(R.id.btnImg)
         btnImg.setOnClickListener{
             dispatchGalleryIntent()
         }
