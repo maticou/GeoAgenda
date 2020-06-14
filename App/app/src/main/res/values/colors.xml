@@ -5,4 +5,5 @@
     <color name="colorAccent">#ED952020</color>
     <color name="colorExit">#C40404</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
