@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GeoAgenda</string>
+    <string name="app_name">Mementos</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -15,17 +15,27 @@
     <string name="menu_settings">Configuraciones</string>
     <string name="menu_categories">Categorías</string>
     <string name="menu_rec">Recordatorios</string>
-    <string name="menu_locations">Mis ubicaciones</string>
-    <string name="menu_groups">Mis grupos</string>
+    //submenu ubicaciones
+    <string name="menu_locations_title">Ubicaciones</string>
+    <string name="menu_locations_saved">Mis ubicaciones</string>
+    <string name="menu_locations_new">Nueva ubicacion</string>
+    <string name="menu_locations_edit">Editar ubicacion</string>
+    //submenu grupos
+    <string name="menu_groups_title">Grupos</string>
+    <string name="menu_groups_saved">Mis grupos</string>
+    <string name="menu_groups_new">Nuevo grupo</string>
+    <string name="menu_groups_edit">Editar grupo</string>
 
     // Para el login
     <string name="email_text_field">Correo</string>
     <string name="password_text_field">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
     <string name="signup_button">Registrarse</string>
+    <string name="login_error">La autenticación falló</string>
+    <string name="logout">Cerrar sesión</string>
 
     <string name="home_second">Home Second</string>
-    <string name = "google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
+    <string name="google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
     <string name="string">Nombre</string>
     <string name="string2">Nueva Ubicación</string>
     <string name="string_agregar">Agregar</string>
@@ -46,5 +56,16 @@
     <string name="create_password_text_field">Contraseña</string>
     <string name="repeat_password_text_field">Repetir contraseña</string>
     <string name="register_button">Crear cuenta</string>
+
+    //Para crear lugar
+    <string name="create_location">Agregar lugar</string>
+    <string name="title_activity_location">Map</string>
+    <string name="title_activity_add_location">Map</string>
+    <string name="nombre">Nombre</string>
+    <string name="imagen_de_grupo">Imagen de grupo</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="agregar_imagen">Agregar imagen</string>
+    <string name="crear_grupo">Crear grupo</string>
+    <string name="escoger_imagen">Escoger imagen</string>
 
 </resources>
