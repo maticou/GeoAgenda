@@ -27,8 +27,8 @@ class LogoutFragment  : Fragment() {
         logoutViewModel =
             ViewModelProviders.of(this).get(LogoutViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_logout, container, false)
-        FirebaseAuth.getInstance().signOut()
-        (activity as MainActivity).exit()
+
+        (activity as MainActivity).logoutSession()
         return root
     }
 }
