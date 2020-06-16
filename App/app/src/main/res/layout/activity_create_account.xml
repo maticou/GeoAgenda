@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme.NoActionBar">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="338dp"
+        android:layout_height="113dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.06999999">
+
+        <TextView
+            android:id="@+id/createUserText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/create_user_title"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="45sp" />
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="362dp"
+        android:layout_height="89dp"
+        android:hint="@string/email_text_field"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        app:startIconDrawable="@drawable/ic_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newEmailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newPasswordEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="362dp"
+        android:layout_height="84dp"
+        android:hint="@string/password_text_field"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/emailEditTextLayout"
+        app:layout_constraintStart_toStartOf="@+id/emailEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
+        app:layout_constraintVertical_bias="0.0"
+        app:startIconDrawable="@drawable/ic_vpn_key">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newPasswordText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/repeatNewPasswordEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="362dp"
+        android:layout_height="84dp"
+        android:hint="@string/repeat_password_text_field"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/newPasswordEditTextLayout"
+        app:layout_constraintStart_toStartOf="@+id/newPasswordEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordEditTextLayout"
+        app:layout_constraintVertical_bias="0.0"
+        app:startIconDrawable="@drawable/ic_vpn_key">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/repeatNewPasswordText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/createAccountButton"
+        style="?attr/materialButtonStyle"
+        android:layout_width="159dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/register_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/repeatNewPasswordEditTextLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/repeatNewPasswordEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/repeatNewPasswordEditTextLayout"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <TextView
+        android:id="@+id/createAccountOr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="201dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="201dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/create_account_o"
+        app:layout_constraintBottom_toTopOf="@+id/googleCreateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createAccountButton" />
+
+    <Button
+        android:id="@+id/googleCreateButton"
+        style="?attr/materialButtonStyle"
+        android:layout_width="159dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/google_create_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/repeatNewPasswordEditTextLayout"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/createAccountButton"
+        app:layout_constraintTop_toBottomOf="@+id/repeatNewPasswordEditTextLayout"
+        app:layout_constraintVertical_bias="0.15" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

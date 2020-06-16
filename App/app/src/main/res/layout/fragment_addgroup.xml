@@ -1,68 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="299dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="132dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="459dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nombreGrupo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/nombre" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        android:layout_width="299dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="111dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:hint="@string/descripci_n" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/imagenGrupo"
         android:layout_width="298dp"
         android:layout_height="125dp"
-        android:layout_marginStart="31dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="31dp"
-        android:layout_marginBottom="51dp"
         android:contentDescription="@string/agregar_imagen"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146"
         app:srcCompat="@drawable/ic_menu_gallery" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/groupNameEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="333dp"
+        android:layout_height="84dp"
+        android:hint="@string/menu_groups_name"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGrupo"
+        app:layout_constraintVertical_bias="0.07999998"
+        app:startIconDrawable="@drawable/ic_menu_groups_black_24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nombreGrupo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/groupDescriptionEditTextLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="337dp"
+        android:layout_height="218dp"
+        android:hint="@string/menu_groups_description"
+        app:boxStrokeColor="@color/colorPrimaryDark"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/groupNameEditTextLayout"
+        app:layout_constraintStart_toStartOf="@+id/groupNameEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/groupNameEditTextLayout"
+        app:layout_constraintVertical_bias="0.110000014">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/groupDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="204dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <Button
+        android:id="@+id/btnImg"
+        style="?attr/materialButtonStyle"
+        android:layout_width="159dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/menu_groups_add_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/groupDescriptionEditTextLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/groupDescriptionEditTextLayout"
+        app:layout_constraintTop_toBottomOf="@+id/groupDescriptionEditTextLayout"
+        app:layout_constraintVertical_bias="0.229" />
+
+    <Button
+        android:id="@+id/createGroupButton"
+        style="?attr/materialButtonStyle"
+        android:layout_width="159dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/menu_groups_create_group"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/groupDescriptionEditTextLayout"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/login_button"
+        app:layout_constraintTop_toBottomOf="@+id/groupDescriptionEditTextLayout"
+        app:layout_constraintVertical_bias="0.229" />
 
         android:id="@+id/btnImg"
         android:layout_width="match_parent"
@@ -75,17 +106,17 @@
         app:layout_constraintTop_toBottomOf="@+id/imagenGrupo" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="225dp"
-        android:text="@string/imagen_de_grupo"
+        android:id="@+id/textView2"
+        android:layout_width="164dp"
+        android:layout_height="31dp"
+        android:text="@string/menu_groups_image_title"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065" />
 
     <Button
         android:id="@+id/btnCrearGrupo"
