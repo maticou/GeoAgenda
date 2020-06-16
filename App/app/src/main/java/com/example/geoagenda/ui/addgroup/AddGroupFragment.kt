@@ -12,6 +12,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import kotlinx.android.synthetic.main.fragment_addgroup.*
 import java.io.IOException
+import android.util.Log
+import android.widget.EditText
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 
 class AddGroupFragment : Fragment(), View.OnClickListener {
@@ -34,6 +38,17 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         btnImg.setOnClickListener{
             dispatchGalleryIntent()
         }
+
+        val inputValue: String = nombreGrupo.text.toString()
+        //val nombreGrupo: TextInputEditText = root.findViewById(R.id.btnCrearGrupo)
+        /*val textoNombreGrupo = nombreGrupo.text.toString()
+
+        val btnCrearGrupo: Button = root.findViewById(R.id.btnCrearGrupo)
+        btnCrearGrupo.setOnClickListener{
+            Log.d("nombre del grupo",textoNombreGrupo)
+        }*/
+
+
         return root
 
 

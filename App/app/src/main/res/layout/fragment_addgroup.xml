@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nombreGrupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nombre" />
@@ -69,7 +70,7 @@
         android:layout_marginTop="11dp"
         android:layout_marginBottom="25dp"
         android:text="@string/escoger_imagen"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btnCrearGrupo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagenGrupo" />
 
@@ -87,7 +88,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnCrearGrupo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
