@@ -72,4 +72,12 @@
     <string name="crear_grupo">Crear grupo</string>
     <string name="escoger_imagen">Escoger imagen</string>
 
+    //submenu categorias
+    <string name="cat1_img_description">Imagen categoria 1</string>
+    <string name="cat1_text_description">Default</string>
+    <string name="cat2_img_description">Imagen categoria 2</string>
+    <string name="cat2_text_description">Farmacia</string>
+    <string name="cat3_img_description">Imagen categoria 3</string>
+    <string name="cat3_text_description">Universidad</string>
+
 </resources>
