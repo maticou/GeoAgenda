@@ -18,8 +18,9 @@
     //submenu ubicaciones
     <string name="menu_locations_title">Ubicaciones</string>
     <string name="menu_locations_saved">Mis ubicaciones</string>
-    <string name="menu_locations_new">Nueva ubicacion</string>
-    <string name="menu_locations_edit">Editar ubicacion</string>
+    <string name="menu_locations_new">Nueva ubicación</string>
+    <string name="write_address">Dirección</string>
+    <string name="menu_locations_edit">Editar ubicación</string>
     //submenu grupos
     <string name="menu_groups_title">Grupos</string>
     <string name="menu_groups_saved">Mis grupos</string>
