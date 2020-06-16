@@ -1,18 +1,26 @@
 package com.example.geoagenda
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+
+enum class ProviderType {
+    BASIC
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +31,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Datos de inicio de sesión
+        val bundle: Bundle? = intent.extras
+        val email = bundle?.getString( "email")
+        val provider = bundle?.getString( "provider")
+
+        // Guardar sesion
+        val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        prefs.edit().putString("email", email).commit()
+        prefs.edit().putString("provider", provider).commit()
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -50,4 +68,16 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    fun logoutSession() {
+        val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        prefs.edit().putString("email", null).commit()
+        prefs.edit().putString("provider", null).commit()
+        prefs.edit().commit()
+        FirebaseAuth.getInstance().signOut()
+        onBackPressed()
+        val intent = Intent( this, LoginActivity::class.java)
+        startActivity(intent)
+    }
 }
+
