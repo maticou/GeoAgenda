@@ -56,6 +56,8 @@
     <string name="create_password_text_field">Contraseña</string>
     <string name="repeat_password_text_field">Repetir contraseña</string>
     <string name="register_button">Crear cuenta</string>
+    <string name="google_create_button">Usar cuenta Google</string>
+    <string name="create_account_o">O</string>
 
     //Para crear lugar
     <string name="create_location">Agregar lugar</string>
