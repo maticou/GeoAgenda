@@ -1,5 +1,6 @@
 package com.example.geoagenda
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,6 @@ class SplashScreenActivity : AppCompatActivity() {
             val intent = Intent( this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+        }, 700)
     }
 }
