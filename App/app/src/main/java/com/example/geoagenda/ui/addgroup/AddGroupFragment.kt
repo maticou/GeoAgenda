@@ -39,6 +39,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
             dispatchGalleryIntent()
         }
 
+        val nombreGrupo: EditText = root.findViewById(R.id.nombreGrupo)
         val inputValue: String = nombreGrupo.text.toString()
         //val nombreGrupo: TextInputEditText = root.findViewById(R.id.btnCrearGrupo)
         /*val textoNombreGrupo = nombreGrupo.text.toString()
