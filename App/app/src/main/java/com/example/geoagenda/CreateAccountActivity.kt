@@ -51,8 +51,7 @@ class CreateAccountActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && isEmailValid(email) && isPasswordValid(password)) {
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
+                        showHome(email, ProviderType.BASIC)
                     }
                     else {
                         /*if(!isEmailValid(email))
@@ -115,5 +114,14 @@ class CreateAccountActivity : AppCompatActivity() {
         {
             return false
         }
+    }
+
+    private fun showHome(email: String, provider: ProviderType) {
+        val homeIntent = Intent( this, MainActivity::class.java).apply {
+            putExtra( "email", email)
+            putExtra( "provider", provider.name)
+        }
+
+        startActivity(homeIntent)
     }
 }
