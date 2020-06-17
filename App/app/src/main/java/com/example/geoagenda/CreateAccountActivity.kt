@@ -12,6 +12,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_create_account.*
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class CreateAccountActivity : AppCompatActivity() {
@@ -22,6 +23,8 @@ class CreateAccountActivity : AppCompatActivity() {
     lateinit var createAccountButton : Button
     lateinit var googleCreateButton: Button
     //private val GOOGLE_SIGN_IN = 100
+    val email = newEmailText.text.toString()
+    val password = newPasswordText.text.toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class CreateAccountActivity : AppCompatActivity() {
         createAccountButton = findViewById(R.id.createAccountButton)
         googleCreateButton = findViewById(R.id.googleCreateButton)
 
-        createAccountButton.setOnClickListener {
+        /*createAccountButton.setOnClickListener {
             val email = newEmailText.text.toString()
             val password = newPasswordText.text.toString()
 
@@ -65,9 +68,9 @@ class CreateAccountActivity : AppCompatActivity() {
                         //startActivity( Intent(this, MainActivity::class.java))
                     }
                 }
-        }
+        }*/
 
-        googleCreateButton.setOnClickListener {
+        /*googleCreateButton.setOnClickListener {
             /*val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -79,6 +82,37 @@ class CreateAccountActivity : AppCompatActivity() {
             startActivity( Intent(this, MainActivity::class.java))
 
 
+        }*/
+        setup()
+    }
+
+    private fun setup()
+    {
+        title = "Autenticacion"
+        createAccountButton.setOnClickListener {
+            if (email.isNotEmpty()  && password.isNotEmpty())
+            {
+                if(isEmailValid(email))
+                {
+                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                        if(it.isSuccessful)
+                        {
+                            val user = auth.currentUser
+                            startActivity( Intent(this, MainActivity::class.java))
+                        }
+                        else
+                        {
+                            Toast.makeText(baseContext, "Error.",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+                else
+                {
+                    Toast.makeText(baseContext, "Error.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
