@@ -22,9 +22,6 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var createAccountButton : Button
     lateinit var googleCreateButton: Button
-    //private val GOOGLE_SIGN_IN = 100
-    val email = newEmailText.text.toString()
-    val password = newPasswordText.text.toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +30,9 @@ class CreateAccountActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         createAccountButton = findViewById(R.id.createAccountButton)
         googleCreateButton = findViewById(R.id.googleCreateButton)
+        //private val GOOGLE_SIGN_IN = 100
+        val email = newEmailText.text.toString()
+        val password = newPasswordText.text.toString()
 
         /*createAccountButton.setOnClickListener {
             val email = newEmailText.text.toString()
@@ -83,10 +83,10 @@ class CreateAccountActivity : AppCompatActivity() {
 
 
         }*/
-        setup()
+        setup(email, password)
     }
 
-    private fun setup()
+    private fun setup(email: String, password: String)
     {
         title = "Autenticacion"
         createAccountButton.setOnClickListener {
