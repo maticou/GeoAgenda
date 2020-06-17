@@ -1,6 +1,9 @@
 package com.example.geoagenda.ui.addgroup
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +15,20 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import kotlinx.android.synthetic.main.fragment_addgroup.*
 import java.io.IOException
+import android.util.Log
+import android.view.Gravity
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toast
+import com.example.geoagenda.R.id.btnAgregarMiembro
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 
 class AddGroupFragment : Fragment(), View.OnClickListener {
     private lateinit var addGroupViewModel: AddGroupViewModel
+    private  val TAG = "MyActivity"
+    private var selectedList = booleanArrayOf(false, false, false, false,false)
     val SELECT_PICTURE = 2
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,10 +47,73 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         btnImg.setOnClickListener{
             dispatchGalleryIntent()
         }
+
+        //val nombreGrupo: EditText = root.findViewById(R.id.nombreGrupo)
+
+        //val inputValue: String = nombreGrupo.text.toString()
+
+        //val nombreGrupo: TextInputEditText = root.findViewById(R.id.btnCrearGrupo)
+        //val textoNombreGrupo = nombreGrupo.text.toString()
+
+        val btnCrearGrupo: Button = root.findViewById(R.id.createGroupButton)
+
+        val botonAgregarMiembro: ImageButton = root.findViewById(R.id.btnAgregarMiembro)
+        botonAgregarMiembro.setOnClickListener {
+        showBasicDialog(null)
+        }
+        //Aqui se deberia crear un grupo con los campos de nombre y descripción
+        btnCrearGrupo.setOnClickListener{
+            //Texto obtenido del campo nombre de grupo
+            val nombreGrp: String = nombreGrupo.text.toString()
+            //Texto obtenido del campo descripción del grupo
+            val desc : String = groupDescriptionEditText.text.toString()
+
+            // Print del nombre del grupo en el log para testeo
+            Log.i(TAG, "nombre del grupo: " + nombreGrp)
+
+            //Tostadas para testeo del ingreso de campos
+            //val toast = Toast.makeText(context, "Nombre grupo: "+nombreGrp, Toast.LENGTH_LONG)
+            //val toast2 = Toast.makeText(context,"Descripcion: "+desc,Toast.LENGTH_LONG)
+            //toast.setGravity(Gravity.TOP or Gravity.LEFT, 0, 0)
+            //toast2.setGravity(Gravity.TOP or Gravity.RIGHT,0,0)
+            //toast.show()
+            //toast2.show()
+
+
+        }
+
+
         return root
 
 
 
+    }
+
+    /*
+    Funcion para mostrar el dialogo para agregar miembros a un grupo
+     */
+    fun showBasicDialog(view: View?) {
+        //1
+        val miembros = arrayOf("Gerardo", "Gonzalo", "Juan", "Manuel","Matias")
+//2
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Seleccionar miembros")
+//3
+        builder.setMultiChoiceItems(miembros, selectedList,
+            DialogInterface.OnMultiChoiceClickListener {
+                    dialog, which, isChecked ->
+                //4
+                selectedList.set(which, isChecked)
+                Toast.makeText(context, miembros[which],
+                    Toast.LENGTH_SHORT).show()
+            })
+//5
+        builder.setPositiveButton("Ok") {
+                dialog, which ->
+            dialog.dismiss()
+        }
+//6
+        builder.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
