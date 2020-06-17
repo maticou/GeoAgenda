@@ -15,16 +15,24 @@
     <string name="menu_settings">Configuraciones</string>
     <string name="menu_categories">Categorías</string>
     <string name="menu_rec">Recordatorios</string>
+
     //submenu ubicaciones
     <string name="menu_locations_title">Ubicaciones</string>
     <string name="menu_locations_saved">Mis ubicaciones</string>
-    <string name="menu_locations_new">Nueva ubicacion</string>
-    <string name="menu_locations_edit">Editar ubicacion</string>
+    <string name="menu_locations_new">Nueva ubicación</string>
+    <string name="write_address">Dirección</string>
+    <string name="menu_locations_edit">Editar ubicación</string>
+
     //submenu grupos
     <string name="menu_groups_title">Grupos</string>
     <string name="menu_groups_saved">Mis grupos</string>
     <string name="menu_groups_new">Nuevo grupo</string>
     <string name="menu_groups_edit">Editar grupo</string>
+    <string name="menu_groups_image_title">Imagen de grupo</string>
+    <string name="menu_groups_name">Nombre de grupo</string>
+    <string name="menu_groups_description">Descripción de grupo</string>
+    <string name="menu_groups_add_image">Escoger imagen</string>
+    <string name="menu_groups_create_group">Crear grupo</string>
 
     // Para el login
     <string name="email_text_field">Correo</string>
@@ -39,7 +47,7 @@
     <string name="prefs_file">com.example.geoagenda.PREFERENCE_FILE_KEY</string>
 
     <string name="home_second">Home Second</string>
-    <string name="google_maps_key">AIzaSyCs82u_JTHwZzCrWIfv6oSVNh3Br-_2LBI</string>
+    <string name="google_maps_key">AIzaSyB09JWcQnsei1k5LS2jn0Z3UBd4poMALLs</string>
     <string name="string">Nombre</string>
     <string name="string2">Nueva Ubicación</string>
     <string name="string_agregar">Agregar</string>
@@ -60,16 +68,21 @@
     <string name="create_password_text_field">Contraseña</string>
     <string name="repeat_password_text_field">Repetir contraseña</string>
     <string name="register_button">Crear cuenta</string>
+    <string name="google_create_button">Usar cuenta Google</string>
+    <string name="create_account_o">O</string>
 
     //Para crear lugar
     <string name="create_location">Agregar lugar</string>
     <string name="title_activity_location">Map</string>
     <string name="title_activity_add_location">Map</string>
-    <string name="nombre">Nombre</string>
-    <string name="imagen_de_grupo">Imagen de grupo</string>
-    <string name="descripci_n">Descripción</string>
     <string name="agregar_imagen">Agregar imagen</string>
-    <string name="crear_grupo">Crear grupo</string>
-    <string name="escoger_imagen">Escoger imagen</string>
+
+    //submenu categorias
+    <string name="cat1_img_description">Imagen categoria 1</string>
+    <string name="cat1_text_description">Default</string>
+    <string name="cat2_img_description">Imagen categoria 2</string>
+    <string name="cat2_text_description">Farmacia</string>
+    <string name="cat3_img_description">Imagen categoria 3</string>
+    <string name="cat3_text_description">Universidad</string>
 
 </resources>
