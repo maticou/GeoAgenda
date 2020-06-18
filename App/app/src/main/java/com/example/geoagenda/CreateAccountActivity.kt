@@ -11,10 +11,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -26,7 +28,8 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var createAccountButton: Button
     lateinit var googleCreateButton: Button
-    //private val GOOGLE_SIGN_IN = 100
+    private val GOOGLE_SIGN_IN = 100
+    //private val RC_SIGN_IN = 9001
     //val email = newEmailText.text.toString()
     //val password = newPasswordText.text.toString()
 
@@ -53,8 +56,7 @@ class CreateAccountActivity : AppCompatActivity() {
                     if (task.isSuccessful && isEmailValid(email) && isPasswordValid(password)) {
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
-                    }
-                    else {
+                    } else {
                         /*if(!isEmailValid(email))
                         {
                             Toast.makeText(
@@ -68,22 +70,24 @@ class CreateAccountActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-
-            /* googleCreateButton.setOnClickListener {
-             val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            //setup(email, password)
+            }
+        googleCreateButton.setOnClickListener {
+            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                  .requestIdToken(getString(R.string.default_web_client_id))
                  .requestEmail()
                  .build()
+            val googleClient = GoogleSignIn.getClient(this, googleConf)
+            googleClient.signOut()
 
-             val googleClient = GoogleSignIn.getClient(this, googleConf)
+            val signInIntent = googleClient.signInIntent
+            // startActivity( Intent(this, MainActivity::class.java))
+            startActivityForResult(
+                signInIntent, GOOGLE_SIGN_IN
+            )
+            //startActivity(Intent(this, MainActivity::class.java))
 
-
-             startActivity( Intent(this, MainActivity::class.java))
-
-
-         }*/
-            //setup(email, password)
-        }
+         }
 
     }
 
@@ -114,6 +118,34 @@ class CreateAccountActivity : AppCompatActivity() {
         else
         {
             return false
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == GOOGLE_SIGN_IN)
+        {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = task.getResult(ApiException::class.java)
+            if(account != null)
+            {
+                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                auth.signInWithCredential(credential).addOnCompleteListener {
+                    if (it.isSuccessful)
+                    {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    }
+                    else
+                    {
+                        Toast.makeText(
+                            baseContext, "Sign Up failed. Try again after some time.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
         }
     }
 }
