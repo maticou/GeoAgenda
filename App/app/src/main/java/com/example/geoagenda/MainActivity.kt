@@ -74,5 +74,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent( this, LoginActivity::class.java)
         startActivity(intent)
     }
+
+    fun addReminder(){
+        val intent = Intent(this, AddReminderActivity::class.java)
+        startActivity(intent)
+    }
 }
 
