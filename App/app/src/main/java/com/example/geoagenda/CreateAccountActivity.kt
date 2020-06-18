@@ -54,6 +54,7 @@ class CreateAccountActivity : AppCompatActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && isEmailValid(email) && isPasswordValid(password)) {
+
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     } else {
@@ -120,6 +121,7 @@ class CreateAccountActivity : AppCompatActivity() {
             return false
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
