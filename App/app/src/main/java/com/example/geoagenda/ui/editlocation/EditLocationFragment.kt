@@ -20,7 +20,7 @@ class EditLocationFragment : Fragment() {
     ): View? {
         editLocationViewModel =
             ViewModelProviders.of(this).get(EditLocationViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_addgroup, container, false)
+        val root = inflater.inflate(R.layout.fragment_editlocation, container, false)
         return root
     }
 }
