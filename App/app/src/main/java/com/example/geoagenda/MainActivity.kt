@@ -19,7 +19,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 enum class ProviderType {
-    BASIC
+    BASIC,
+    GOOGLE
 }
 
 class MainActivity : AppCompatActivity() {
