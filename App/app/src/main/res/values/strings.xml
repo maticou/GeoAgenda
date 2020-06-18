@@ -84,5 +84,9 @@
     <string name="cat2_text_description">Farmacia</string>
     <string name="cat3_img_description">Imagen categoria 3</string>
     <string name="cat3_text_description">Universidad</string>
+    <string name="crear_grupo" />
+    <string name="name">Agregar miembro</string>
+    <string name="textview">Agregar miembro</string>
+    <string name="todo">TODO</string>
 
 </resources>
