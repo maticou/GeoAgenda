@@ -6,4 +6,14 @@
     <color name="colorExit">#C40404</color>
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+
+    <!-- New MaterialComponents attributes. -->
+    <color name="my_app_primary_variant_color">#0E6838</color>
+    <color name="my_app_secondary_variant_color">#40C57E</color>
+    <color name="my_app_surface_color">#FFFFFF</color>
+    <color name="my_app_color_on_primary">#FFFFFF</color>
+    <color name="my_app_color_on_secondary">#6C0707</color>
+    <color name="my_app_color_on_background">#127514</color>
+    <color name="my_app_color_on_error">#FF0000</color>
+    <color name="my_app_color_on_surface">#383937</color>
 </resources>
