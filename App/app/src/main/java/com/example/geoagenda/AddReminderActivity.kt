@@ -2,6 +2,7 @@ package com.example.geoagenda
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -18,6 +19,7 @@ class AddReminderActivity : AppCompatActivity() {
         val actionBar = supportActionBar
 
         actionBar!!.title = "Agregar Recordatorio"
+        actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Agregar Recordatorio </font>"));
         actionBar.setDisplayHomeAsUpEnabled(true)
 
         val database = FirebaseDatabase.getInstance()
