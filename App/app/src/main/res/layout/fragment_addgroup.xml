@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    tools:ignore="ExtraText">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="164dp"
+                android:layout_height="31dp"
+                android:layout_marginStart="97dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="99dp"
+                android:layout_marginBottom="7dp"
+                android:text="@string/menu_groups_image_title"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imagenGrupo"
+                android:layout_width="298dp"
+                android:layout_height="125dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="27dp"
+                android:contentDescription="@string/agregar_imagen"
+                app:srcCompat="@drawable/ic_menu_gallery" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/groupNameEditTextLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="333dp"
+                android:layout_height="84dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/menu_groups_name"
+                app:boxStrokeColor="@color/colorPrimaryDark"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/ic_menu_groups_black_24dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nombreGrupo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/groupDescriptionEditTextLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="337dp"
+                android:layout_height="196dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="11dp"
+                app:boxStrokeColor="@color/colorPrimaryDark"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    android:hint="@string/menu_groups_description"
+                    android:gravity="start|top"
+                    android:layout_width="match_parent"
+                    android:layout_height="146dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:text="@string/textview"
+                android:textSize="20sp"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/btnAgregarMiembro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_menu_group_add_black_24dp"
+                android:contentDescription="@string/todo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnImg"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="19dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="@string/menu_groups_add_image" />
+
+                <Button
+                    android:id="@+id/createGroupButton"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="148dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="19dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="@string/menu_groups_create_group" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+    <![CDATA[
+
+
+    android:id="@+id/btnImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/escoger_imagen"
+        app:layout_constraintBottom_toTopOf="@+id/btnCrearGrupo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenGrupo" />
+
+]]>
+</androidx.constraintlayout.widget.ConstraintLayout>
