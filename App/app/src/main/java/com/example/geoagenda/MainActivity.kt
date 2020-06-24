@@ -41,11 +41,15 @@ class MainActivity : AppCompatActivity() {
         // Datos de inicio de sesión
         val bundle: Bundle? = intent.extras
         val email = bundle?.getString( "email")
+        val username = bundle?.getString( "username")
+        val avatar = bundle?.getString( "avatar")
         val provider = bundle?.getString( "provider")
 
         // Guardar sesion
         val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         prefs.edit().putString("email", email).commit()
+        prefs.edit().putString("username", username).commit()
+        prefs.edit().putString("avatar", avatar).commit()
         prefs.edit().putString("provider", provider).commit()
 
         //Toast que muestra el email de acceso
@@ -59,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         val userName = headerView.findViewById<TextView>(R.id.userNameTextView)
         val userEmail = headerView.findViewById<TextView>(R.id.userEmailTextView)
-        userName.setText("Nombre de usuario")
+        userName.setText(username)
         userEmail.setText(email)
 
         // Passing each menu ID as a set of Ids because each
@@ -84,6 +88,8 @@ class MainActivity : AppCompatActivity() {
     fun logoutSession() {
         val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         prefs.edit().putString("email", null).commit()
+        prefs.edit().putString("username", null).commit()
+        prefs.edit().putString("avatar", null).commit()
         prefs.edit().putString("provider", null).commit()
         prefs.edit().commit()
         FirebaseAuth.getInstance().signOut()
