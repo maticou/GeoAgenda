@@ -27,8 +27,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     lateinit var createAccountButton: Button
-    lateinit var googleCreateButton: Button
-    private val GOOGLE_SIGN_IN = 100
+    lateinit var cancelButton: Button
+
     //private val RC_SIGN_IN = 9001
     //val email = newEmailText.text.toString()
     //val password = newPasswordText.text.toString()
@@ -39,7 +39,8 @@ class CreateAccountActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
         createAccountButton = findViewById(R.id.createAccountButton)
-        googleCreateButton = findViewById(R.id.googleCreateButton)
+        cancelButton = findViewById(R.id.discardButton)
+
 
         //val email = newEmailText.text.toString()
         //val password = newPasswordText.text.toString()
@@ -48,14 +49,11 @@ class CreateAccountActivity : AppCompatActivity() {
             val email = newEmailText.text.toString()
             val password = newPasswordText.text.toString()
 
-            Log.d("CreateAccountActivity", "El correo es: " + email)
-            Log.d("CreateAccountActivity", "La contraseña es: " + password)
-
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && isEmailValid(email) && isPasswordValid(password)) {
-
-                        startActivity(Intent(this, MainActivity::class.java))
+                        val user = auth.currentUser
+                        showHome(email, ProviderType.BASIC)
                         finish()
                     } else {
                         /*if(!isEmailValid(email))
@@ -72,23 +70,11 @@ class CreateAccountActivity : AppCompatActivity() {
                     }
                 }
             //setup(email, password)
-            }
-        googleCreateButton.setOnClickListener {
-            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                 .requestIdToken(getString(R.string.default_web_client_id))
-                 .requestEmail()
-                 .build()
-            val googleClient = GoogleSignIn.getClient(this, googleConf)
-            googleClient.signOut()
-
-            val signInIntent = googleClient.signInIntent
-            // startActivity( Intent(this, MainActivity::class.java))
-            startActivityForResult(
-                signInIntent, GOOGLE_SIGN_IN
-            )
-            //startActivity(Intent(this, MainActivity::class.java))
-
-         }
+        }
+        cancelButton.setOnClickListener {
+            val intent = Intent( this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -122,32 +108,11 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == GOOGLE_SIGN_IN)
-        {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val account = task.getResult(ApiException::class.java)
-            if(account != null)
-            {
-                val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-                auth.signInWithCredential(credential).addOnCompleteListener {
-                    if (it.isSuccessful)
-                    {
-                        startActivity(Intent(this, MainActivity::class.java))
-                    }
-                    else
-                    {
-                        Toast.makeText(
-                            baseContext, "Sign Up failed. Try again after some time.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-
+    private fun showHome(email: String, provider: ProviderType) {
+        val homeIntent = Intent( this, MainActivity::class.java).apply {
+            putExtra( "email", email)
+            putExtra( "provider", provider.name)
         }
+        startActivity(homeIntent)
     }
 }
