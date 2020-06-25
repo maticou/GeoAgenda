@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "163939527697-lbf8hb3kr0hhbr77lmuq6ve9g0gu75np.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geoagenda",
+            "certificate_hash": "a09802fdae07c21480d6afb3f0cabd9a321c3664"
+          }
+        },
+        {
+          "client_id": "163939527697-c51a4gpur3pe2utuni733ffpc6h9jr3i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geoagenda",
+            "certificate_hash": "44d84574a6ac9b4fcf2f4d4b2f808dabd3fc0c7f"
+          }
+        },
+        {
           "client_id": "163939527697-v88h17aebli2ncf9utgbuhfr5kicb3br.apps.googleusercontent.com",
           "client_type": 3
         }

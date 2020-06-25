@@ -70,12 +70,13 @@ android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="11dp"
-                android:hint="@string/menu_groups_description"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/groupDescriptionEditText"
+                    android:hint="@string/menu_groups_description"
+                    android:gravity="start|top"
                     android:layout_width="match_parent"
                     android:layout_height="146dp" />
 
@@ -109,7 +110,7 @@ android:layout_height="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="19dp"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimary"
                     android:text="@string/menu_groups_add_image" />
 
                 <Button
@@ -119,7 +120,7 @@ android:layout_height="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="1dp"
                     android:layout_marginEnd="19dp"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/colorPrimary"
                     android:text="@string/menu_groups_create_group" />
 
             </LinearLayout>
