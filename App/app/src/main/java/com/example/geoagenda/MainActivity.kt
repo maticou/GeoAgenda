@@ -3,9 +3,14 @@ package com.example.geoagenda
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +26,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.net.URL
 
 enum class ProviderType {
     BASIC,
@@ -77,6 +84,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+        val bundle: Bundle? = intent.extras
+        val avatar = bundle?.getString( "avatar")
+        val userAvatar = userAvatarimageView.findViewById<ImageView>(R.id.userAvatarimageView)
+        DownLoadImageTask(userAvatar).execute(avatar)
         return true
     }
 
@@ -101,6 +112,29 @@ class MainActivity : AppCompatActivity() {
     fun addReminder(){
         val intent = Intent(this, AddReminderActivity::class.java)
         startActivity(intent)
+    }
+
+    private class DownLoadImageTask(internal val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+        override fun doInBackground(vararg urls: String): Bitmap? {
+            val urlOfImage = urls[0]
+            return try {
+                val inputStream = URL(urlOfImage).openStream()
+                BitmapFactory.decodeStream(inputStream)
+            } catch (e: Exception) { // Catch the download exception
+                e.printStackTrace()
+                null
+            }
+        }
+        override fun onPostExecute(result: Bitmap?) {
+            if(result!=null){
+                // Display the downloaded image into image view
+                Toast.makeText(imageView.context,"download success",Toast.LENGTH_SHORT).show()
+                val resize = Bitmap.createScaledBitmap(result, 100, 100, false)
+                imageView.setImageBitmap(resize)
+            }else{
+                Toast.makeText(imageView.context,"Error downloading",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
 

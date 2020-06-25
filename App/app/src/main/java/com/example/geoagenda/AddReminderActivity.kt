@@ -1,8 +1,12 @@
 package com.example.geoagenda
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
+import androidx.annotation.RequiresApi
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -12,14 +16,17 @@ class AddReminderActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_reminder)
 
         val actionBar = supportActionBar
+        val backgroundColor = ColorDrawable(getColor(R.color.colorPrimary))
 
         actionBar!!.title = "Agregar Recordatorio"
         actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Agregar Recordatorio </font>"));
+        actionBar.setBackgroundDrawable(backgroundColor)
         actionBar.setDisplayHomeAsUpEnabled(true)
 
         val database = FirebaseDatabase.getInstance()
