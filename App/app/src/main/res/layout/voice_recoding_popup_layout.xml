@@ -18,7 +18,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="15dp" />
 
             <Chronometer
                 android:id="@+id/c_meter"
@@ -40,7 +40,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="15dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
