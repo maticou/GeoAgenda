@@ -76,7 +76,8 @@ class HomeFragment : Fragment() {
 
                     val newReminder = Reminder(data.get("id").toString(),
                         data.get("title").toString(),
-                        data.get("note").toString())
+                        data.get("note").toString(),
+                        data.get("recording").toString())
 
                     //println(newReminder)
                     reminderList.add(newReminder)
