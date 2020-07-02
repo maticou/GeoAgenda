@@ -1,11 +1,15 @@
 package com.example.geoagenda
 
+
 import android.Manifest
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
@@ -14,6 +18,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.Chronometer
 import androidx.core.app.ActivityCompat
+import androidx.annotation.RequiresApi
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +40,7 @@ class AddReminderActivity : AppCompatActivity() {
     private var player: MediaPlayer? = null
     private lateinit var storage: FirebaseStorage
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_reminder)
@@ -42,8 +48,10 @@ class AddReminderActivity : AppCompatActivity() {
 
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
+        val backgroundColor = ColorDrawable(getColor(R.color.colorPrimary))
         actionBar!!.title = "Agregar Recordatorio"
         actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Agregar Recordatorio </font>"));
+        actionBar.setBackgroundDrawable(backgroundColor)
         actionBar.setDisplayHomeAsUpEnabled(true)
 
         auth = FirebaseAuth.getInstance()

@@ -52,14 +52,15 @@ class LoginActivity : AppCompatActivity() {
 
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
-
+                val username = "null"
+                val avatar = "null"
 
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             val user = auth.currentUser
-                            showHome(email, ProviderType.BASIC)
+                            showHome(email, username, avatar, ProviderType.BASIC)
                         } else {
                             // If sign in fails, display a message to the user.
                             emailEditTextLayout.error = getString(R.string.error)
@@ -93,9 +94,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun showHome(email: String, provider: ProviderType) {
+    private fun showHome(email: String, username: String, avatar: String, provider: ProviderType) {
         val homeIntent = Intent( this, MainActivity::class.java).apply {
             putExtra( "email", email)
+            putExtra( "username", username)
+            putExtra( "avatar", avatar)
             putExtra( "provider", provider.name)
         }
         startActivity(homeIntent)
@@ -109,10 +112,12 @@ class LoginActivity : AppCompatActivity() {
     private fun session() {
         val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email: String? = prefs.getString("email", null)
+        val username: String? = prefs.getString("username", null)
+        val avatar: String? = prefs.getString("avatar", null)
         val provider: String? = prefs.getString("provider", null)
 
-        if(email != null && provider != null) {
-            showHome(email, ProviderType.valueOf(provider))
+        if(email != null && username != null && avatar != null && provider != null) {
+            showHome(email, username, avatar, ProviderType.valueOf(provider))
         }
     }
 
@@ -124,12 +129,14 @@ class LoginActivity : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)
             if(account != null) {
                 val email = account.email.toString()
+                val username = account.displayName.toString()
+                val avatar = account.photoUrl.toString()
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 auth.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        showHome(email, ProviderType.GOOGLE)
+                        showHome(email, username, avatar, ProviderType.GOOGLE)
                     }
                     else {
                         Toast.makeText(
