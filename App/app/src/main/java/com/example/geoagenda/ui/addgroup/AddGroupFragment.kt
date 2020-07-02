@@ -2,27 +2,28 @@ package com.example.geoagenda.ui.addgroup
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
+import com.example.geoagenda.ui.group.Group
+import com.example.geoagenda.ui.reminder.Reminder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_addgroup.*
 import java.io.IOException
-import android.util.Log
-import android.view.Gravity
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
-import com.example.geoagenda.R.id.btnAgregarMiembro
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 
 class AddGroupFragment : Fragment(), View.OnClickListener {
@@ -30,6 +31,8 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
     private  val TAG = "MyActivity"
     private var selectedList = booleanArrayOf(false, false, false, false,false)
     val SELECT_PICTURE = 2
+    private lateinit var auth: FirebaseAuth
+    public  var imguri: Uri? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,6 +50,19 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         btnImg.setOnClickListener{
             dispatchGalleryIntent()
         }
+
+
+        //Parámetros para la base de datos en firebase
+        val database = FirebaseDatabase.getInstance()
+        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
+        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+        auth = FirebaseAuth.getInstance()
+
+        //Parámetros que tendrá un nuevo grupo al ser creado
+        val user = auth.currentUser
+        var itemId = myRef.child(user?.uid.toString()).push()
+        val groupID = itemId.key.toString()
+
 
         //val nombreGrupo: EditText = root.findViewById(R.id.nombreGrupo)
 
@@ -68,8 +84,15 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
             //Texto obtenido del campo descripción del grupo
             val desc : String = groupDescriptionEditText.text.toString()
 
-            // Print del nombre del grupo en el log para testeo
-            Log.i(TAG, "nombre del grupo: " + nombreGrp)
+           //Creacion de un grupo al presionar el boton y enviar datos a firebase
+
+
+            var group = Group(groupID,nombreGrp, desc, user?.uid.toString())
+
+            myRef.child(user?.uid.toString()).child("Grupos").child(group.id).setValue(group)
+
+
+
 
             //Tostadas para testeo del ingreso de campos
             //val toast = Toast.makeText(context, "Nombre grupo: "+nombreGrp, Toast.LENGTH_LONG)
@@ -120,7 +143,12 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         if(requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK){
             try{
                 val uri = data!!.data
+                imguri = data!!.data
                 imagenGrupo.setImageURI(uri)
+                val database = FirebaseDatabase.getInstance()
+                val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
+                val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+                //storageRef.putFile(uri2)
             }
             catch (e: IOException){
                 e.printStackTrace()
