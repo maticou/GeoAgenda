@@ -3,22 +3,22 @@ package com.example.geoagenda
 
 import android.Manifest
 import android.app.Dialog
-import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
+import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.Chronometer
-import androidx.core.app.ActivityCompat
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +46,10 @@ class AddReminderActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_reminder)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
 
+        //Aqui se rellenan los formularios con los datos del recordatorio clickeado
+        title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
+        note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
+
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
         val backgroundColor = ColorDrawable(getColor(R.color.colorPrimary))
@@ -64,7 +68,13 @@ class AddReminderActivity : AppCompatActivity() {
         //Parametros que se utilizaran en la creacion de un recordatorio
         val user = auth.currentUser
         var itemId = myRef.child(user?.uid.toString()).push()
-        val reminderID = itemId.key.toString()
+
+        //Le asigno el id de un recordatorio ya creado para
+        // actualizarlo, pero si no existe, se crea desde cero
+        var reminderID = intent.getStringExtra("REMINDER_ID")
+        if(reminderID == null){
+            reminderID = itemId.key.toString()
+        }
         var reminderRecording = ""
 
         //codigo para el boton de guardar
