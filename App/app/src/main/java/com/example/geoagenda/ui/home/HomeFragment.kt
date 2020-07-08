@@ -1,13 +1,15 @@
 package com.example.geoagenda.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.geoagenda.AddReminderActivity
 import com.example.geoagenda.MainActivity
 import com.example.geoagenda.R
 import com.example.geoagenda.ui.reminder.Reminder
@@ -20,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var auth: FirebaseAuth
@@ -49,9 +51,17 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         //println(reminderList.size)
-        recycler_view.adapter = ReminderViewAdapter(reminderList)
+        recycler_view.adapter = ReminderViewAdapter(reminderList, this)
         recycler_view.layoutManager = LinearLayoutManager(this.context)
         recycler_view.setHasFixedSize(true)
+    }
+
+    override fun onItemClick(reminders: Reminder, position: Int) {
+        val intent = Intent(context, AddReminderActivity::class.java)
+        intent.putExtra("REMINDER_ID", reminders.id)
+        intent.putExtra("REMINDER_TITLE", reminders.title)
+        intent.putExtra("REMINDER_NOTE", reminders.note)
+        startActivity(intent)
     }
 
     private fun getReminders(){
@@ -84,6 +94,10 @@ class HomeFragment : Fragment() {
                 }
 
                 recycler_view.adapter!!.notifyDataSetChanged()
+                /*val hola = reminderList.get(0)
+                Toast.makeText(context, "id: "+hola.id, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "title: "+hola.title, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "note: "+hola.note, Toast.LENGTH_SHORT).show()*/
             }
 
             override fun onCancelled(error: DatabaseError) {
