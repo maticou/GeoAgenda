@@ -21,13 +21,13 @@
 
     <fragment
         android:id="@+id/nav_locations_new"
-        android:name="com.example.geoagenda.ui.locations.LocationsFragment"
+        android:name="com.example.geoagenda.ui.addlocation.AddLocationFragment"
         android:label="@string/menu_locations_new"
         tools:layout="@layout/fragment_locations" />
 
     <fragment
         android:id="@+id/nav_locations_saved"
-        android:name="com.example.geoagenda.ui.addlocation.AddLocationFragment"
+        android:name="com.example.geoagenda.ui.locations.LocationsFragment"
         android:label="@string/menu_locations_saved"
         tools:layout="@layout/fragment_addlocation"/>
     <fragment
