@@ -17,17 +17,26 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_create_account.*
 import kotlinx.android.synthetic.main.activity_login.*
 
 
 class CreateAccountActivity : AppCompatActivity() {
-
     //UI elements
-
     private lateinit var auth: FirebaseAuth
     lateinit var createAccountButton: Button
     lateinit var cancelButton: Button
+    var username = ""
+    var email = ""
+    var password = ""
+
+    //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
+    val database = FirebaseDatabase.getInstance()
+    val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
+    var user: FirebaseUser? = null
+    val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
 
     //private val RC_SIGN_IN = 9001
     //val email = newEmailText.text.toString()
@@ -46,13 +55,14 @@ class CreateAccountActivity : AppCompatActivity() {
         //val password = newPasswordText.text.toString()
 
         createAccountButton.setOnClickListener {
-            val email = newEmailText.text.toString()
-            val password = newPasswordText.text.toString()
+            username = newUsernameText.text.toString()
+            email = newEmailText.text.toString()
+            password = newPasswordText.text.toString()
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful && isEmailValid(email) && isPasswordValid(password)) {
-                        val user = auth.currentUser
+                        user = auth.currentUser
                         showHome(email, ProviderType.BASIC)
                         finish()
                     } else {
@@ -110,9 +120,12 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private fun showHome(email: String, provider: ProviderType) {
         val homeIntent = Intent( this, MainActivity::class.java).apply {
+            putExtra( "username", username)
             putExtra( "email", email)
             putExtra( "provider", provider.name)
         }
+        val myUser = User(user?.uid.toString(), email, username, "", ProviderType.BASIC)
+        myRef.child(user?.uid.toString()).child("Datos-Personales").child(myUser.id).setValue(myUser)
         startActivity(homeIntent)
     }
 }
