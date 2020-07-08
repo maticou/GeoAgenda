@@ -92,5 +92,10 @@
     //Crear recordatorio
     <string name="title_reminder">Título</string>
     <string name="description_reminder">Recordatorio</string>
+    <string name="ingrese_email_para_invitar_a_un_usuario">Ingrese email para invitar a un usuario</string>
+    <string name="email" />
+    <string name="enviar">Enviar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="ingresa_un_email">Ingresa un email</string>
 
 </resources>
