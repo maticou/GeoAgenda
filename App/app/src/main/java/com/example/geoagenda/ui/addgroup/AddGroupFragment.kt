@@ -85,7 +85,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
        //Llamar al evento para obtener los usuarios actuales del sistema para poder agregarlos
 
-        
+        var groupImage = ""
 
         //Aqui se deberia crear un grupo con los campos de nombre y descripción
         btnCrearGrupo.setOnClickListener{
@@ -96,8 +96,9 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
            //Creacion de un grupo al presionar el boton y enviar datos a firebase
 
+            groupImage ="${getActivity()?.getExternalCacheDir()?.absolutePath}/${groupID}.jpg"
+            var group = Group(groupID,nombreGrp, desc, user?.uid.toString(),groupImage)
 
-            var group = Group(groupID,nombreGrp, desc, user?.uid.toString())
 
             myRef.child(user?.uid.toString()).child("Grupos").child(group.id).setValue(group)
 
@@ -105,13 +106,13 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
             //var imagen = Uri.fromFile(File("${""}/${groupID}.png"))
             val imagenRef = storageRef.child("${groupID}/Imagen/"+ UUID.randomUUID().toString())
 
-            val imagenGuardada = "${""}/${groupID}.3gp"
             var uploadTask = imagenRef.putFile(imguri!!)
 
             uploadTask.addOnFailureListener {
                 println("Ocurrio un error al subir el archivo")
             }.addOnSuccessListener {
                 println("El archivo se ha subido correctamente")
+                activity?.onBackPressed()
             }
 
 
