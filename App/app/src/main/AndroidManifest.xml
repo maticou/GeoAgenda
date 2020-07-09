@@ -9,6 +9,10 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <meta-data
         android:name="com.google.android.gms.version"
@@ -40,7 +44,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Location"
+            android:name=".LocationActivity"
             android:label="@string/title_activity_location" />
         <activity
             android:name=".SplashScreenActivity"

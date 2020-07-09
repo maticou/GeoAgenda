@@ -22,14 +22,14 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/voice"
+                    android:id="@+id/add_voice_recording"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_baseline_keyboard_voice_24" />
 
                 <ImageButton
-                    android:id="@+id/image"
+                    android:id="@+id/add_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -84,8 +84,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/note_inputEditTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="379dp"
-                android:layout_height="193dp"
+                android:layout_width="390dp"
+                android:layout_height="350dp"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="11dp"
                 app:boxStrokeColor="@color/colorPrimaryDark"
@@ -94,7 +94,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/note_input"
                     android:layout_width="match_parent"
-                    android:layout_height="146dp"
+                    android:layout_height="match_parent"
                     android:gravity="start|top"
                     android:hint="@string/description_reminder"
                     android:inputType="textMultiLine" />

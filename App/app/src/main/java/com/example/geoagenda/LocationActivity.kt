@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-class LocationActivity : AppCompatActivity(),OnMapReadyCallback,GoogleMap.OnMarkerClickListener {
+class LocationActivity : AppCompatActivity(),OnMapReadyCallback{
 
     companion object {
         private const val LOCATION_PERMITION_REQUEST_CODE = 1
@@ -24,10 +25,9 @@ class LocationActivity : AppCompatActivity(),OnMapReadyCallback,GoogleMap.OnMark
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_location)
+        setContentView(R.layout.fragment_locations)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
@@ -44,18 +44,12 @@ class LocationActivity : AppCompatActivity(),OnMapReadyCallback,GoogleMap.OnMark
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        val myPlace = LatLng(40.73, -73.99)
+        mMap.addMarker(MarkerOptions().position(myPlace).title("My Favorite City"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(myPlace))
 
-        val talca = LatLng (-35.4266305,-71.6661153)
-        mMap.addMarker(MarkerOptions().position(talca).title("Talca city").snippet("Aquí se encuentra Talca").icon(
-            BitmapDescriptorFactory.fromResource(R.drawable.location)))
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-
-        mMap.setOnMarkerClickListener(this)
         mMap.uiSettings.isZoomControlsEnabled = true
+        println("LocationActivity")
         setUpMap()
     }
 
@@ -67,5 +61,5 @@ class LocationActivity : AppCompatActivity(),OnMapReadyCallback,GoogleMap.OnMark
             return
         }
     }
-    override fun onMarkerClick(p0: Marker?)= false
+
 }

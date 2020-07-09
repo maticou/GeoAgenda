@@ -8,7 +8,7 @@
     <string name="action_settings">Settings</string>
 
     // Para el menu
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Recordatorios</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_logOut">Cerrar Sesión</string>
@@ -64,6 +64,7 @@
     <string name="create_user_title">Crear cuenta de usuario</string>
     <string name="string_user_name">Nombre</string>
     <string name="string_user_surname">Apellido</string>
+    <string name="create_username">Nombre de usuario</string>
     <string name="create_email_text_field">Correo</string>
     <string name="create_password_text_field">Contraseña</string>
     <string name="repeat_password_text_field">Repetir contraseña</string>
@@ -92,5 +93,14 @@
     //Crear recordatorio
     <string name="title_reminder">Título</string>
     <string name="description_reminder">Recordatorio</string>
+    <string name="ingrese_email_para_invitar_a_un_usuario">Ingrese email para invitar a un usuario</string>
+    <string name="email" />
+    <string name="enviar">Enviar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="ingresa_un_email">Ingresa un email</string>
+    <string name="open_gallery_button">Abrir Galeria</string>
+    <string name="save_image_button">Guardar</string>
+    <string name="discard_image_button">Cancelar</string>
+
 
 </resources>

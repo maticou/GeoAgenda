@@ -12,7 +12,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -23,6 +29,10 @@ class LoginActivity : AppCompatActivity() {
     lateinit var createButton: Button
     lateinit var googleCreateButton: Button
     private val GOOGLE_SIGN_IN = 100
+    //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
+    var user: FirebaseUser? = null
+    val database = FirebaseDatabase.getInstance()
+    val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +62,15 @@ class LoginActivity : AppCompatActivity() {
 
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
-
+                val username = "null"
+                val avatar = "null"
 
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
-                            val user = auth.currentUser
-                            showHome(email, ProviderType.BASIC)
+                            user = auth.currentUser
+                            getUserData()
                         } else {
                             // If sign in fails, display a message to the user.
                             emailEditTextLayout.error = getString(R.string.error)
@@ -93,9 +104,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun showHome(email: String, provider: ProviderType) {
+    private fun showHome(email: String, username: String, avatar: String, provider: ProviderType) {
         val homeIntent = Intent( this, MainActivity::class.java).apply {
             putExtra( "email", email)
+            putExtra( "username", username)
+            putExtra( "avatar", avatar)
             putExtra( "provider", provider.name)
         }
         startActivity(homeIntent)
@@ -109,11 +122,45 @@ class LoginActivity : AppCompatActivity() {
     private fun session() {
         val prefs =  getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
         val email: String? = prefs.getString("email", null)
+        val username: String? = prefs.getString("username", null)
+        val avatar: String? = prefs.getString("avatar", null)
         val provider: String? = prefs.getString("provider", null)
 
-        if(email != null && provider != null) {
-            showHome(email, ProviderType.valueOf(provider))
+        if(email != null && username != null && avatar != null && provider != null) {
+            showHome(email, username, avatar, ProviderType.valueOf(provider))
         }
+    }
+
+    private fun getUserData(){
+        val database = FirebaseDatabase.getInstance()
+        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+
+        auth = FirebaseAuth.getInstance()
+
+        val rootRef = myRef.child(user?.uid.toString()).child("Datos-Personales")
+
+        rootRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val values = dataSnapshot.children
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    val newUser = User(data.get("id").toString(),
+                        data.get("email").toString(),
+                        data.get("username").toString(),
+                        data.get("avatar").toString(),
+                        ProviderType.BASIC)
+                    showHome(newUser.email, newUser.username, newUser.avatar, ProviderType.BASIC)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -124,12 +171,16 @@ class LoginActivity : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)
             if(account != null) {
                 val email = account.email.toString()
+                val username = account.displayName.toString()
+                val avatar = account.photoUrl.toString()
                 val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 auth.signInWithCredential(credential).addOnCompleteListener {
                     if (it.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
-                        showHome(email, ProviderType.GOOGLE)
+                        val myUser = User(user?.uid.toString(), email, username, avatar, ProviderType.GOOGLE)
+                        myRef.child(user?.uid.toString()).child("Datos-Personales").child(myUser.id).setValue(myUser)
+                        showHome(email, username, avatar, ProviderType.GOOGLE)
                     }
                     else {
                         Toast.makeText(
