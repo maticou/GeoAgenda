@@ -87,7 +87,8 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                     val newReminder = Reminder(data.get("id").toString(),
                         data.get("title").toString(),
                         data.get("note").toString(),
-                        data.get("recording").toString())
+                        data.get("recording").toString(),
+                        data.get("image").toString())
 
                     //println(newReminder)
                     reminderList.add(newReminder)
