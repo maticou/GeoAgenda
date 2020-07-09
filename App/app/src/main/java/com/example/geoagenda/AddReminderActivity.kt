@@ -15,10 +15,7 @@ import android.os.SystemClock
 import android.text.Html
 import android.util.Log
 import android.view.Window
-import android.widget.ActionMenuView
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -45,6 +42,8 @@ class AddReminderActivity : AppCompatActivity() {
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private lateinit var storage: FirebaseStorage
+    private lateinit var preview: ImageView
+    private  var imguri: Uri? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,6 +162,8 @@ class AddReminderActivity : AppCompatActivity() {
             addImageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             addImageDialog.setContentView(R.layout.add_image_popup_layout)
 
+            preview = addImageDialog.findViewById(R.id.image_from_gallery_preview) as ImageView
+
             var openGallery = addImageDialog.findViewById(R.id.button_open_gallery) as Button
             var saveImage = addImageDialog.findViewById(R.id.button_save_image) as Button
             var discardImage = addImageDialog.findViewById(R.id.button_discard_image) as Button
@@ -175,11 +176,11 @@ class AddReminderActivity : AppCompatActivity() {
 
             saveImage.setOnClickListener {
 
-                var image_preview = Uri.fromFile(File("${externalCacheDir?.absolutePath}/${reminderID}.jpg"))
+                //var image_preview = Uri.fromFile(File("${externalCacheDir?.absolutePath}/${reminderID}.jpg"))
                 //val imageRef = storageRef.child("${user?.uid.toString()}/Image/${image_preview.lastPathSegment}")
                 val imageRef = storageRef.child("${user?.uid.toString()}/Imagen/"+ UUID.randomUUID().toString())
                 reminderImage = "${externalCacheDir?.absolutePath}/${reminderID}.jpg"
-                var uploadTask = imageRef.putFile(image_preview)
+                var uploadTask = imageRef.putFile(imguri!!)
                 uploadTask.addOnFailureListener {
                     println("Ocurrio un error al subir el archivo")
                 }.addOnSuccessListener {
@@ -252,9 +253,13 @@ class AddReminderActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK && resultCode == REQUEST_GALLERY)
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_GALLERY)
         {
-            image_from_gallery_preview.setImageURI(data?.data)
+            imguri = data!!.data
+            preview.setImageURI(imguri)
+        }
+        else{
+
         }
     }
 }
