@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,20 +13,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.content.contentValuesOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import com.example.geoagenda.ui.group.Group
-import com.example.geoagenda.ui.reminder.Reminder
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.enter_email_invite_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_addgroup.*
-import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AddGroupFragment : Fragment(), View.OnClickListener {
@@ -37,6 +37,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
     val SELECT_PICTURE = 2
     private lateinit var auth: FirebaseAuth
     public  var imguri: Uri? = null
+    lateinit var userList: ArrayList<User>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,8 +67,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         val user = auth.currentUser
         var itemId = myRef.child(user?.uid.toString()).push()
         val groupID = itemId.key.toString()
-
-
+        userList = arrayListOf()
         //val nombreGrupo: EditText = root.findViewById(R.id.nombreGrupo)
 
         //val inputValue: String = nombreGrupo.text.toString()
@@ -81,6 +81,12 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         botonAgregarMiembro.setOnClickListener {
         showBasicDialog(null)
         }
+
+
+       //Llamar al evento para obtener los usuarios actuales del sistema para poder agregarlos
+
+        
+
         //Aqui se deberia crear un grupo con los campos de nombre y descripción
         btnCrearGrupo.setOnClickListener{
             //Texto obtenido del campo nombre de grupo
@@ -133,27 +139,20 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
     Funcion para mostrar el dialogo para agregar miembros a un grupo
      */
     fun showBasicDialog(view: View?) {
-        //1
-        val miembros = arrayOf("Gerardo", "Gonzalo", "Juan", "Manuel","Matias")
-//2
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Seleccionar miembros")
-//3
-        builder.setMultiChoiceItems(miembros, selectedList,
-            DialogInterface.OnMultiChoiceClickListener {
-                    dialog, which, isChecked ->
-                //4
-                selectedList.set(which, isChecked)
-                Toast.makeText(context, miembros[which],
-                    Toast.LENGTH_SHORT).show()
-            })
-//5
-        builder.setPositiveButton("Ok") {
-                dialog, which ->
-            dialog.dismiss()
+
+       val mDialogView = LayoutInflater.from(context).inflate(R.layout.enter_email_invite_dialog,null)
+
+        val mBuilder= AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle("Ingresa correo para invitar a un usuario al grupo")
+
+        val mAlertDialog = mBuilder.show()
+        mDialogView.EnviarBtn.setOnClickListener{
+            mAlertDialog.dismiss()
+            val email = mDialogView.edit_text_email.text.toString()
         }
-//6
-        builder.show()
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
