@@ -2,20 +2,20 @@ package com.example.geoagenda
 
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
 import android.util.Log
 import android.view.Window
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,27 +25,33 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
+import kotlinx.android.synthetic.main.add_image_popup_layout.*
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+private const val REQUEST_GALLERY = 2
 
 class AddReminderActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private var recording: Boolean = true
     private var permissionToRecordAccepted = false
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private var recordingPath: String? = null
     private lateinit var storage: FirebaseStorage
+    private lateinit var preview: ImageView
+    private  var imguri: Uri? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_reminder)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_GALLERY)
 
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
@@ -86,15 +92,17 @@ class AddReminderActivity : AppCompatActivity() {
             reminderID = itemId.key.toString()
         }
         var reminderRecording = ""
+        var reminderImage = ""
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
             val titleInput: String = title_input.text.toString()
             val noteInput: String = note_input.text.toString()
+
             if(reminderRecording == "") {
                 reminderRecording = recordingPath.toString()
             }
-            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording)
+            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage)
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()
@@ -161,6 +169,46 @@ class AddReminderActivity : AppCompatActivity() {
 
             voiceRecordingDialog.show()
         }
+
+        add_image.setOnClickListener {
+            val addImageDialog = Dialog(this)
+            addImageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            addImageDialog.setContentView(R.layout.add_image_popup_layout)
+
+            preview = addImageDialog.findViewById(R.id.image_from_gallery_preview) as ImageView
+
+            var openGallery = addImageDialog.findViewById(R.id.button_open_gallery) as Button
+            var saveImage = addImageDialog.findViewById(R.id.button_save_image) as Button
+            var discardImage = addImageDialog.findViewById(R.id.button_discard_image) as Button
+
+            openGallery.setOnClickListener{
+                val intentGaleria = Intent(Intent.ACTION_PICK)
+                intentGaleria.type = "image/*"
+                startActivityForResult(intentGaleria, REQUEST_GALLERY)
+            }
+
+            saveImage.setOnClickListener {
+
+                //var image_preview = Uri.fromFile(File("${externalCacheDir?.absolutePath}/${reminderID}.jpg"))
+                //val imageRef = storageRef.child("${user?.uid.toString()}/Image/${image_preview.lastPathSegment}")
+                val imageRef = storageRef.child("${user?.uid.toString()}/Imagen/"+ UUID.randomUUID().toString())
+                reminderImage = "${externalCacheDir?.absolutePath}/${reminderID}.jpg"
+                var uploadTask = imageRef.putFile(imguri!!)
+                uploadTask.addOnFailureListener {
+                    println("Ocurrio un error al subir el archivo")
+                }.addOnSuccessListener {
+                    println("El archivo se ha subido correctamente")
+                }
+                addImageDialog.dismiss()
+            }
+
+            discardImage.setOnClickListener {
+                addImageDialog.dismiss()
+            }
+
+            addImageDialog.show()
+
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -216,5 +264,15 @@ class AddReminderActivity : AppCompatActivity() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_GALLERY)
+        {
+            imguri = data!!.data
+            preview.setImageURI(imguri)
+        }
+        else{
 
+        }
+    }
 }
