@@ -41,6 +41,7 @@ class AddReminderActivity : AppCompatActivity() {
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
+    private var recordingPath: String? = null
     private lateinit var storage: FirebaseStorage
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
@@ -55,12 +56,21 @@ class AddReminderActivity : AppCompatActivity() {
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
         note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
+        recordingPath = intent.getStringExtra("REMINDER_AUDIO")
 
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
         val backgroundColor = ColorDrawable(getColor(R.color.colorPrimary))
-        actionBar!!.title = "Agregar Recordatorio"
-        actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>Agregar Recordatorio </font>"));
+
+        //Le asigno el nombre de la actividad a editar recordatorio
+        //de lo contrario se queda como agregar recordatorio
+        actionBar!!.title = intent.getStringExtra("ACTIVITY_TITLE")
+        if(actionBar!!.title == null){
+            actionBar!!.title = "Agregar Recordatorio"
+        }
+
+        //Estos valores modifican datos de la barra de la ventana para crear recordatorios
+        actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>${actionBar!!.title} </font>"));
         actionBar.setBackgroundDrawable(backgroundColor)
         actionBar.setDisplayHomeAsUpEnabled(true)
 
@@ -89,6 +99,9 @@ class AddReminderActivity : AppCompatActivity() {
             val titleInput: String = title_input.text.toString()
             val noteInput: String = note_input.text.toString()
 
+            if(reminderRecording == "") {
+                reminderRecording = recordingPath.toString()
+            }
             var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage)
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)

@@ -58,9 +58,11 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
 
     override fun onItemClick(reminders: Reminder, position: Int) {
         val intent = Intent(context, AddReminderActivity::class.java)
+        intent.putExtra("ACTIVITY_TITLE", "Editar Recordatorio")
         intent.putExtra("REMINDER_ID", reminders.id)
         intent.putExtra("REMINDER_TITLE", reminders.title)
         intent.putExtra("REMINDER_NOTE", reminders.note)
+        intent.putExtra("REMINDER_AUDIO", reminders.recording)
         startActivity(intent)
     }
 
