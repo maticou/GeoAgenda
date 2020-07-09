@@ -1,12 +1,16 @@
 package com.example.geoagenda.ui.reminder
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geoagenda.R
 import kotlinx.android.synthetic.main.reminder_card.view.*
+import java.io.File
 
 class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: OnReminderItemClickListener) : RecyclerView.Adapter<ReminderViewAdapter.ReminderViewHolder>(){
 
@@ -27,10 +31,12 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
     override fun getItemCount() = reminderList.size
 
     class ReminderViewHolder(reminderCard: View) : RecyclerView.ViewHolder(reminderCard){
+        val image: ImageView = reminderCard.reminder_image
         val title: TextView = reminderCard.reminder_title
         val note: TextView = reminderCard.reminder_note
 
         fun initialize(item: Reminder, action: OnReminderItemClickListener) {
+            image.setImageURI(Uri.parse(item.image))
             title.text = item.title
             note.text = item.note
 
