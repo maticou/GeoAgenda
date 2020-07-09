@@ -63,6 +63,7 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
         intent.putExtra("REMINDER_TITLE", reminders.title)
         intent.putExtra("REMINDER_NOTE", reminders.note)
         intent.putExtra("REMINDER_AUDIO", reminders.recording)
+        intent.putExtra("REMINDER_IMAGE", reminders.image)
         startActivity(intent)
     }
 
@@ -97,10 +98,6 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                 }
 
                 recycler_view.adapter!!.notifyDataSetChanged()
-                /*val hola = reminderList.get(0)
-                Toast.makeText(context, "id: "+hola.id, Toast.LENGTH_SHORT).show()
-                Toast.makeText(context, "title: "+hola.title, Toast.LENGTH_SHORT).show()
-                Toast.makeText(context, "note: "+hola.note, Toast.LENGTH_SHORT).show()*/
             }
 
             override fun onCancelled(error: DatabaseError) {
