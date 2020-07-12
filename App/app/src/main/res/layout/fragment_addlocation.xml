@@ -23,7 +23,7 @@
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
                 app:boxStrokeColor="@color/colorPrimaryDark"
-                app:startIconDrawable="@drawable/ic_map">
+                app:startIconDrawable="@drawable/ic_location_city">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/location_name"
@@ -40,7 +40,7 @@
                 android:layout_height="86dp"
                 android:layout_gravity="center_horizontal"
                 app:boxStrokeColor="@color/colorPrimaryDark"
-                app:startIconDrawable="@drawable/ic_map">
+                app:startIconDrawable="@drawable/ic_location_searching">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/address"

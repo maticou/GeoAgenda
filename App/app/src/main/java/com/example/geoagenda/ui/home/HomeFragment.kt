@@ -1,10 +1,13 @@
 package com.example.geoagenda.ui.home
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -21,13 +24,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.io.File
 
 class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var auth: FirebaseAuth
     private var reminderList = ArrayList<Reminder>()
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -63,6 +66,7 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
         intent.putExtra("REMINDER_TITLE", reminders.title)
         intent.putExtra("REMINDER_NOTE", reminders.note)
         intent.putExtra("REMINDER_AUDIO", reminders.recording)
+        intent.putExtra("REMINDER_IMAGE", reminders.image)
         startActivity(intent)
     }
 
@@ -97,10 +101,6 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                 }
 
                 recycler_view.adapter!!.notifyDataSetChanged()
-                /*val hola = reminderList.get(0)
-                Toast.makeText(context, "id: "+hola.id, Toast.LENGTH_SHORT).show()
-                Toast.makeText(context, "title: "+hola.title, Toast.LENGTH_SHORT).show()
-                Toast.makeText(context, "note: "+hola.note, Toast.LENGTH_SHORT).show()*/
             }
 
             override fun onCancelled(error: DatabaseError) {

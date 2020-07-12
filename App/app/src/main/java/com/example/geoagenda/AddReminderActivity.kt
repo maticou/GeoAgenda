@@ -42,6 +42,7 @@ class AddReminderActivity : AppCompatActivity() {
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private var recordingPath: String? = null
+    private var imagePath: String? = null
     private lateinit var storage: FirebaseStorage
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
@@ -57,6 +58,7 @@ class AddReminderActivity : AppCompatActivity() {
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
         note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
         recordingPath = intent.getStringExtra("REMINDER_AUDIO")
+        imagePath = intent.getStringExtra("REMINDER_IMAGE")
 
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
@@ -101,6 +103,9 @@ class AddReminderActivity : AppCompatActivity() {
 
             if(reminderRecording == "") {
                 reminderRecording = recordingPath.toString()
+            }
+            if(reminderImage == "") {
+                reminderImage = imagePath.toString()
             }
             var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage)
 
