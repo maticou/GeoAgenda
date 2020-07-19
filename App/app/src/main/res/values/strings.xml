@@ -103,6 +103,7 @@
     <string name="discard_image_button">Cancelar</string>
     <string name="unirse_a_un_grupo">Unirse a un grupo</string>
     <string name="invitaciones_para_unirse_a_grupos">Invitaciones para unirse a grupos</string>
+    <string name="invitaciones_recibidas">Invitaciones recibidas</string>
 
 
 </resources>
