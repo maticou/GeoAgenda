@@ -89,6 +89,7 @@
     <string name="name">Agregar miembro</string>
     <string name="textview">Agregar miembro</string>
     <string name="todo">TODO</string>
+    <string name="title_category">TITULO</string>
 
     //Crear recordatorio
     <string name="title_reminder">Título</string>

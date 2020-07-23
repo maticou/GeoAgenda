@@ -95,7 +95,8 @@ class AddReminderActivity : AppCompatActivity() {
         }
         var reminderRecording = ""
         var reminderImage = ""
-
+        //asociar id de categoria
+        var reminderCategory = ""
         //codigo para el boton de guardar
         save.setOnClickListener(){
             val titleInput: String = title_input.text.toString()
@@ -107,7 +108,7 @@ class AddReminderActivity : AppCompatActivity() {
             if(reminderImage == "") {
                 reminderImage = imagePath.toString()
             }
-            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage)
+            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage, reminderCategory)
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()

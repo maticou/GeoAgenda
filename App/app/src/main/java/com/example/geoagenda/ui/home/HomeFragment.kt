@@ -28,6 +28,13 @@ import java.io.File
 
 class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener {
 
+    companion object {
+        fun newInstance(): HomeFragment {
+            val fragment = HomeFragment()
+            return fragment
+        }
+    }
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var auth: FirebaseAuth
     private var reminderList = ArrayList<Reminder>()
@@ -89,15 +96,17 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
 
                 values.forEach {
                     val data = it.value as HashMap<String, String>
-
+                    //if (data.get("category")==)
                     val newReminder = Reminder(data.get("id").toString(),
                         data.get("title").toString(),
                         data.get("note").toString(),
                         data.get("recording").toString(),
-                        data.get("image").toString())
+                        data.get("image").toString(),
+                        data.get("category").toString())
 
                     //println(newReminder)
                     reminderList.add(newReminder)
+
                 }
 
                 recycler_view.adapter!!.notifyDataSetChanged()
@@ -108,4 +117,6 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
             }
         })
     }
+
+
 }
