@@ -23,7 +23,7 @@
             android:id="@+id/EnviarBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/enviar" />
+            android:text="@string/registrar_correo" />
 
     </LinearLayout>
 
