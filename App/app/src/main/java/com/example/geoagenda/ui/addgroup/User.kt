@@ -2,43 +2,27 @@ package com.example.geoagenda.ui.addgroup
 
 class User
 {
-    private var avatar: String = ""
-    private var email: String = ""
-    private var id: String = ""
-    private var provider: String = ""
-    private var username: String = ""
+
+    private var Email: String = ""
+    private var UID: String = ""
 
     constructor()
 
-    constructor(avatar:String, email:String,id:String,provider:String,username:String)
+    constructor( Email:String,UID:String)
     {
-        this.avatar=avatar
-        this.email=email
-        this.id=id
-        this.provider=provider
-        this.username=username
+        this.Email=Email
+        this.UID=UID
     }
 
-    fun getAvatar():String
-    {
-        return avatar
-    }
+
     fun getEmail():String
     {
-        return email
+        return Email
     }
-    fun getId():String
+    fun getUId():String
     {
-        return id
+        return UID
     }
-    fun getProvider():String
-    {
-        return provider
-    }
-    fun getUsername():String
-{
-    return username
-}
 
 
 

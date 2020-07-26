@@ -57,30 +57,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
             //Acá estoy probando como buscar la id del usuario pasando el correo, solo puedo hacerlo si ya se la id con anterioridad
             //Para probarlo hay que hacer click en el botón de agregar imagen
             mDatabase = FirebaseDatabase.getInstance().getReference()
-            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/47B8Fmnq09XXQcYIRHnhDlWDlaD3")
-            val query: Query = userReference!!.child("Datos-Personales").orderByChild("email").equalTo("gonzalorojasgarcia@gmail.com")
 
-            Log.e(TAG,"query: " + query.toString())
-            Log.e(TAG,"alo: " + userReference.toString())
-
-            val userListener = object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.e(TAG,"Snapshot: "+snapshot)
-                    if (snapshot.exists()){
-                        for (issue in snapshot.getChildren()) {
-                            val user = issue.getValue(User::class.java)
-                            Log.e(TAG,"Usuario: "+user!!.getId())
-                        }
-
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG,"falló!!")
-                }
-            }
-            //userReference!!.addValueEventListener(userListener)
-            query.addListenerForSingleValueEvent(userListener)
 
             dispatchGalleryIntent()
         }
@@ -148,11 +125,40 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
 
             //Luego de crear el grupo se realiza el procedimiento para crear la invitacion al usuario que se ingresa en el campo de invitación
-            //Primero se retornan los datos del email del usuario que se ingreso en la invitacion
+
+            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
+            val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(userEmail)
+
+            Log.e(TAG,"query: " + query.toString())
+            Log.e(TAG,"alo: " + userReference.toString())
+            var invitation = Invitation(user?.email.toString(),group.id)
+
+
+            //Aquí se crea un listener para obtener el id del email buscado
+            val userListener = object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.e(TAG,"Snapshot: "+snapshot)
+                    if (snapshot.exists()){
+                        for (issue in snapshot.getChildren()) {
+                            val user = issue.getValue(User::class.java)
+                            Log.e(TAG,"Usuario: "+user!!.getUId())
+                            var invitedId = user!!.getUId()
 
 
 
+                            userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
+                            Log.e(TAG,"reference: "+ userReference.toString())
+                        }
 
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG,"falló!!")
+                }
+            }
+            //userReference!!.addValueEventListener(userListener)
+            query.addListenerForSingleValueEvent(userListener)
 
 
 
