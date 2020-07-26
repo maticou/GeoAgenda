@@ -125,6 +125,9 @@ class CreateAccountActivity : AppCompatActivity() {
             putExtra( "provider", provider.name)
         }
         val myUser = User(user?.uid.toString(), email, username, "", ProviderType.BASIC)
+        val correoSinPunto = myUser.email.replace(".","")
+        myRef.child("Correos").child(correoSinPunto).child("Email").setValue(myUser.email)
+        myRef.child("Correos").child(correoSinPunto).child("UID").setValue(myUser.id)
         myRef.child(user?.uid.toString()).child("Datos-Personales").child(myUser.id).setValue(myUser)
         startActivity(homeIntent)
     }
