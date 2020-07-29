@@ -22,13 +22,18 @@ import androidx.core.app.ActivityCompat
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
 import kotlinx.android.synthetic.main.add_image_popup_layout.*
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.collections.HashMap
+import com.example.geoagenda.ui.addlocation.Location
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
@@ -46,6 +51,8 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
+    private lateinit var dropMenu: AutoCompleteTextView
+    private var locationsList = ArrayList<String>()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -214,6 +221,36 @@ class AddReminderActivity : AppCompatActivity() {
             addImageDialog.show()
 
         }
+
+        //codigo encargado del spinner para seleccionar ubicacion
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
+        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+
+        locations_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                locationsList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    val newLocation = Location(data.get("id").toString(),
+                        data.get("nombre").toString(),
+                        data.get("latitud") as Double,
+                        data.get("longitud") as Double)
+
+                    locationsList.add(data.get("nombre").toString())
+                }
+            }
+        })
+
+        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
+
+        dropMenu.setAdapter(adapter)
     }
 
     override fun onSupportNavigateUp(): Boolean {
