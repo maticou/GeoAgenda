@@ -5,6 +5,11 @@ class Reminder constructor(
     var title: String,
     var note: String,
     var recording: String,
-    var image: String
+    var image: String,
+    var day: String,
+    var month: String,
+    var year: String,
+    var hour: String,
+    var minute: String
     ){
 }
