@@ -51,7 +51,7 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
-    private lateinit var spinner: Spinner
+    private lateinit var dropMenu: AutoCompleteTextView
     private var locationsList = ArrayList<String>()
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -223,7 +223,7 @@ class AddReminderActivity : AppCompatActivity() {
         }
 
         //codigo encargado del spinner para seleccionar ubicacion
-        spinner = findViewById(R.id.locations_spinner)
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
         val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
 
         locations_ref.addValueEventListener(object : ValueEventListener{
@@ -248,9 +248,9 @@ class AddReminderActivity : AppCompatActivity() {
             }
         })
 
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationsList )
+        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
 
-        spinner.adapter = adapter
+        dropMenu.setAdapter(adapter)
     }
 
     override fun onSupportNavigateUp(): Boolean {

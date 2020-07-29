@@ -48,17 +48,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="21dp" />
 
-            <TextView
-                android:id="@+id/textView5"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ubicación" />
+                android:hint="Ubicacion">
 
-            <Spinner
-                android:id="@+id/locations_spinner"
+                <AutoCompleteTextView
+                    android:id="@+id/filled_exposed_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:layout_height="21dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_inputTextLayout"
@@ -90,10 +96,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/note_inputEditTextLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="390dp"
+                android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginEnd="11dp"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:errorEnabled="true">
 
@@ -135,6 +140,11 @@
                     android:layout_weight="1"
                     android:text="Descartar" />
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="22dp" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
