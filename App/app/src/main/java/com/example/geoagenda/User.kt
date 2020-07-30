@@ -1,5 +1,6 @@
 package com.example.geoagenda
 
+
 class User constructor(
     var id: String,
     var email: String,
@@ -7,4 +8,5 @@ class User constructor(
     var avatar: String,
     var provider: ProviderType
 ){
+
 }
