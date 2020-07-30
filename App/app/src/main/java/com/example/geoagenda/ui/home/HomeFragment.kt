@@ -67,6 +67,7 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
         intent.putExtra("REMINDER_NOTE", reminders.note)
         intent.putExtra("REMINDER_AUDIO", reminders.recording)
         intent.putExtra("REMINDER_IMAGE", reminders.image)
+        intent.putExtra("REMINDER_LOCATION", reminders.location)
         startActivity(intent)
     }
 
@@ -94,7 +95,8 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                         data.get("title").toString(),
                         data.get("note").toString(),
                         data.get("recording").toString(),
-                        data.get("image").toString())
+                        data.get("image").toString(),
+                        data.get("location").toString())
 
                     //println(newReminder)
                     reminderList.add(newReminder)
