@@ -3,7 +3,9 @@ package com.example.geoagenda
 
 import android.Manifest
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -14,6 +16,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
+import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -31,17 +34,18 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
-import kotlinx.android.synthetic.main.add_image_popup_layout.*
 import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.collections.HashMap
 import com.example.geoagenda.ui.addlocation.Location
+import kotlinx.android.synthetic.main.fragment_joingroup.*
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
 
-class AddReminderActivity : AppCompatActivity() {
+class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private lateinit var auth: FirebaseAuth
     private var recording: Boolean = true
@@ -58,6 +62,16 @@ class AddReminderActivity : AppCompatActivity() {
     private var locationsList = ArrayList<String>()
     private var locationsIdList = ArrayList<String>()
     private lateinit var reminder: Reminder
+    var day = 0
+    var month: Int = 0
+    var year: Int = 0
+    var hour: Int = 0
+    var minute: Int = 0
+    var myDay = 0
+    var myMonth: Int = 0
+    var myYear: Int = 0
+    var myHour: Int = 0
+    var myMinute: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,6 +132,22 @@ class AddReminderActivity : AppCompatActivity() {
         recordingPath = intent.getStringExtra("REMINDER_AUDIO")
         imagePath = intent.getStringExtra("REMINDER_IMAGE")
 
+        if(!intent.getStringExtra("REMINDER_DAY").isNullOrEmpty()){
+            myDay = intent.getStringExtra("REMINDER_DAY").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_MONTH").isNullOrEmpty()){
+            myMonth = intent.getStringExtra("REMINDER_MONTH").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_YEAR").isNullOrEmpty()){
+            myYear = intent.getStringExtra("REMINDER_YEAR").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_HOUR").isNullOrEmpty()){
+            myHour = intent.getStringExtra("REMINDER_HOUR").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_MINUTE").isNullOrEmpty()){
+            myMinute = intent.getStringExtra("REMINDER_MINUTE").toInt()
+        }
+
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
         val backgroundColor = ColorDrawable(getColor(R.color.colorPrimary))
@@ -163,6 +193,8 @@ class AddReminderActivity : AppCompatActivity() {
             if(reminderImage == "") {
                 reminderImage = imagePath.toString()
             }
+            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording,
+                reminderImage, myDay.toString(), myMonth.toString(), myYear.toString(), myHour.toString(), myMinute.toString())
 
             reminder.id = reminderID
             reminder.title = titleInput
@@ -222,7 +254,7 @@ class AddReminderActivity : AppCompatActivity() {
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
-
+                add_voice_recording.setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_voice_green))
                 voiceRecordingDialog.dismiss()
             }
 
@@ -265,6 +297,7 @@ class AddReminderActivity : AppCompatActivity() {
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
+                add_image.setImageDrawable(resources.getDrawable(R.drawable.ic_photo_green))
                 addImageDialog.dismiss()
             }
 
@@ -275,6 +308,50 @@ class AddReminderActivity : AppCompatActivity() {
             addImageDialog.show()
 
         }
+
+
+        alarmButton.setOnClickListener {
+            showDateTimeDialog()
+        }
+
+        //codigo encargado del spinner para seleccionar ubicacion
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
+        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+
+        locations_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                locationsList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    val newLocation = Location(data.get("id").toString(),
+                        data.get("nombre").toString(),
+                        data.get("latitud") as Double,
+                        data.get("longitud") as Double)
+
+                    locationsList.add(data.get("nombre").toString())
+                }
+            }
+        })
+
+        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
+
+        dropMenu.setAdapter(adapter)
+    }
+
+    private fun showDateTimeDialog() {
+        val calendar: Calendar = Calendar.getInstance()
+        day = calendar.get(Calendar.DAY_OF_MONTH)
+        month = calendar.get(Calendar.MONTH)
+        year = calendar.get(Calendar.YEAR)
+        val datePickerDialog = DatePickerDialog(this, R.style.DialogTheme, this, year, month,day)
+        datePickerDialog.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -340,5 +417,25 @@ class AddReminderActivity : AppCompatActivity() {
         else{
 
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        myDay = day
+        myYear = year
+        myMonth = month
+        val calendar: Calendar = Calendar.getInstance()
+        hour = calendar.get(Calendar.HOUR)
+        minute = calendar.get(Calendar.MINUTE)
+        val timePickerDialog = TimePickerDialog(this, R.style.DialogTheme, this, hour, minute, DateFormat.is24HourFormat(this))
+        timePickerDialog.show()
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        myHour = hourOfDay
+        myMinute = minute
+        //val text: String = "Year: " + myYear + "\n" + "Month: " + myMonth + "\n" + "Day: " + myDay + "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
+        //Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+        alarmButton.setImageDrawable(resources.getDrawable(R.drawable.ic_alarm_on))
     }
 }
