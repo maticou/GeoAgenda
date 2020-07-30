@@ -92,7 +92,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         //Esta linea crea un recordatorio con todos sus campos vacios para luego rellenarlos
         //cuando se termina de crear un recordatorio
-        reminder = Reminder("","","","","", "")
+        reminder = Reminder("","","","","", "","","","","","")
 
         //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
         val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
@@ -193,14 +193,17 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             if(reminderImage == "") {
                 reminderImage = imagePath.toString()
             }
-            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording,
-                reminderImage, myDay.toString(), myMonth.toString(), myYear.toString(), myHour.toString(), myMinute.toString())
 
             reminder.id = reminderID
             reminder.title = titleInput
             reminder.note = noteInput
             reminder.recording = reminderRecording
             reminder.image = reminderImage
+            reminder.day = myDay.toString()
+            reminder.month =  myMonth.toString()
+            reminder.year = myYear.toString()
+            reminder.hour = myHour.toString()
+            reminder.minute = myMinute.toString()
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()
@@ -313,36 +316,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         alarmButton.setOnClickListener {
             showDateTimeDialog()
         }
-
-        //codigo encargado del spinner para seleccionar ubicacion
-        dropMenu = findViewById(R.id.filled_exposed_dropdown)
-        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
-
-        locations_ref.addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-                //error al obtener datos
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val values = snapshot.children
-                locationsList.clear()
-
-                values.forEach {
-                    val data = it.value as HashMap<String, String>
-
-                    val newLocation = Location(data.get("id").toString(),
-                        data.get("nombre").toString(),
-                        data.get("latitud") as Double,
-                        data.get("longitud") as Double)
-
-                    locationsList.add(data.get("nombre").toString())
-                }
-            }
-        })
-
-        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
-
-        dropMenu.setAdapter(adapter)
     }
 
     private fun showDateTimeDialog() {

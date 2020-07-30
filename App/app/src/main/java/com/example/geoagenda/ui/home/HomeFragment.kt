@@ -100,13 +100,13 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                         data.get("title").toString(),
                         data.get("note").toString(),
                         data.get("recording").toString(),
+                        data.get("location").toString(),
                         data.get("image").toString(),
                         data.get("day").toString(),
                         data.get("month").toString(),
                         data.get("year").toString(),
                         data.get("hour").toString(),
                         data.get("minute").toString())
-                        data.get("location").toString())
 
                     //println(newReminder)
                     reminderList.add(newReminder)
