@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.Window
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -79,19 +80,20 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
         recordingPath = intent.getStringExtra("REMINDER_AUDIO")
         imagePath = intent.getStringExtra("REMINDER_IMAGE")
-        if(intent.getStringExtra("REMINDER_DAY").isNullOrEmpty()){
+
+        if(!intent.getStringExtra("REMINDER_DAY").isNullOrEmpty()){
             myDay = intent.getStringExtra("REMINDER_DAY").toInt()
         }
-        if(intent.getStringExtra("REMINDER_MONTH").isNullOrEmpty()){
+        if(!intent.getStringExtra("REMINDER_MONTH").isNullOrEmpty()){
             myMonth = intent.getStringExtra("REMINDER_MONTH").toInt()
         }
-        if(intent.getStringExtra("REMINDER_YEAR").isNullOrEmpty()){
+        if(!intent.getStringExtra("REMINDER_YEAR").isNullOrEmpty()){
             myYear = intent.getStringExtra("REMINDER_YEAR").toInt()
         }
-        if(intent.getStringExtra("REMINDER_HOUR").isNullOrEmpty()){
+        if(!intent.getStringExtra("REMINDER_HOUR").isNullOrEmpty()){
             myHour = intent.getStringExtra("REMINDER_HOUR").toInt()
         }
-        if(intent.getStringExtra("REMINDER_MINUTE").isNullOrEmpty()){
+        if(!intent.getStringExtra("REMINDER_MINUTE").isNullOrEmpty()){
             myMinute = intent.getStringExtra("REMINDER_MINUTE").toInt()
         }
 
@@ -376,8 +378,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         myHour = hourOfDay
         myMinute = minute
-        val text: String = "Year: " + myYear + "\n" + "Month: " + myMonth + "\n" + "Day: " + myDay + "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        //val text: String = "Year: " + myYear + "\n" + "Month: " + myMonth + "\n" + "Day: " + myDay + "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
+        //Toast.makeText(this, text, Toast.LENGTH_LONG).show()
 
         alarmButton.setImageDrawable(resources.getDrawable(R.drawable.ic_alarm_on))
     }
