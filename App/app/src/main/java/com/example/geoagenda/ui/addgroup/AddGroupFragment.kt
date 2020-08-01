@@ -38,6 +38,8 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
     private var mDatabase: DatabaseReference? =null
     private var userReference: DatabaseReference? = null
      var usersList: MutableList<User> = ArrayList()
+    private var miembros: ArrayList<Miembro> = ArrayList()
+    private lateinit var miembro: Miembro
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -104,10 +106,26 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
            //Creacion de un grupo al presionar el boton y enviar datos a firebase
 
             groupImage ="${getActivity()?.getExternalCacheDir()?.absolutePath}/${groupID}.jpg"
+
+            //Crear un miembro que será el administrador del grupo a crear
+            miembro = Miembro(user?.uid.toString(),user?.email.toString())
+            var miembro2 = Miembro(user?.uid.toString()+"jaja",user?.email.toString())
+
+            //Agregar el miembro a la lista de miembros (aqui solo irá un miembro que es el admin)
+            miembros.add(miembro)
+
+            //Crear grupo para usuario y para grupos en general
+
             var group = Group(groupID,nombreGrp, desc, user?.uid.toString(),groupImage)
-
-
+            var groupC = GroupC(groupID,nombreGrp,desc,user?.uid.toString(),groupImage,user?.email.toString())
+            val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
+            groupRef.child(groupC.id).setValue(groupC)
             myRef.child(user?.uid.toString()).child("Grupos").child(group.id).setValue(group)
+
+            //Agregar miembro a la lista de miembros en la base de datos (miembro administrador)
+
+            groupRef.child(groupC.id).child("Miembros").child(user?.uid.toString()).setValue(miembro)
+
 
             //se crea el directorio necesario para guardar el archivo en firebase y luego se almacena
             //var imagen = Uri.fromFile(File("${""}/${groupID}.png"))
@@ -131,7 +149,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
             Log.e(TAG,"query: " + query.toString())
             Log.e(TAG,"alo: " + userReference.toString())
-            var invitation = Invitation(user?.email.toString(),group.id)
+            var invitation = Invitation(user?.email.toString(),group.id,group.name)
 
 
             //Aquí se crea un listener para obtener el id del email buscado

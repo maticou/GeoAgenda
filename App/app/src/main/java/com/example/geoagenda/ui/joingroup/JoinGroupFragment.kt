@@ -1,5 +1,6 @@
 package com.example.geoagenda.ui.joingroup
 
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.enter_email_invite_dialog.view.*
 
 
 class JoinGroupFragment: Fragment(), View.OnClickListener {
@@ -59,7 +61,8 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
                         Log.e(TAG,"Email invitador: "+invitacion!!.idGrupo)
                         var inviteGroupId = invitacion!!.idGrupo
                         var inviteGroupEmail = invitacion!!.email
-                        arrayListEmails.add(inviteGroupEmail)
+                        var inviteGroupName = invitacion!!.nombreGrupo
+                        arrayListEmails.add(inviteGroupEmail +": "+inviteGroupName )
 
 
                         //userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
@@ -83,7 +86,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
         //A continuación viene el método que se ejecuta al presionar un elemento de la lista, en este caso un email
         listView.setOnItemClickListener{parent,view,position,id ->
             //val toast = Toast.makeText(requireContext(),"Has hecho click en la invitación de\n"+invites[position],Toast.LENGTH_LONG)
-
+            showBasicDialog(view)
             //toast.setGravity(Gravity.CENTER,0,0)
             //toast.show()
         }
@@ -93,6 +96,23 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
         return root
     }
 
+    //Dialogo para confirmar la union a un grupo al cual se le hizo click de la lista de grupos
+    fun showBasicDialog(view: View?) {
+
+        val mDialogView = LayoutInflater.from(context).inflate(R.layout.confirm_join_group,null)
+
+        val mBuilder= AlertDialog.Builder(context)
+            .setView(mDialogView)
+            .setTitle("Confirmación")
+
+        val mAlertDialog = mBuilder.show()
+        //mDialogView.EnviarBtn.setOnClickListener{
+           // mAlertDialog.dismiss()
+            //userEmail = mDialogView.edit_text_email.text.toString()
+       // }
+
+
+    }
     override fun onClick(v: View?) {
         TODO("Not yet implemented")
     }
