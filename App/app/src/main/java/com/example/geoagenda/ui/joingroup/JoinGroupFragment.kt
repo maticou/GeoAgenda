@@ -15,8 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
+import com.example.geoagenda.ui.addgroup.GroupC
+import com.example.geoagenda.ui.addgroup.Miembro
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.confirm_join_group.view.*
 import kotlinx.android.synthetic.main.enter_email_invite_dialog.view.*
 
 
@@ -26,6 +29,11 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     var arrayListEmails: ArrayList<String> = ArrayList()
     lateinit var arrayAdapter: ArrayAdapter<String>
+    lateinit var inviteGroupId : String
+    lateinit var inviteGroupName: String
+    lateinit var inviteGroupEmail: String
+    lateinit var listView : ListView
+     var invitePos: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,7 +57,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
         //val invites = arrayOf<String>("correo1@hotmail.com","correo2@hotmail.com","correo3@hotmail.com","correo4@hotmail.com")
 
         //asignamos la listview en la vista a la variable
-        val listView = root.findViewById<ListView>(R.id.invite_list)
+        listView = root.findViewById<ListView>(R.id.invite_list)
 
 
         userReference!!.addValueEventListener( object: ValueEventListener {
@@ -59,9 +67,9 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
                     for (issue in snapshot.getChildren()) {
                         val invitacion = issue.getValue(Invitacion::class.java)
                         Log.e(TAG,"Email invitador: "+invitacion!!.idGrupo)
-                        var inviteGroupId = invitacion!!.idGrupo
-                        var inviteGroupEmail = invitacion!!.email
-                        var inviteGroupName = invitacion!!.nombreGrupo
+                        inviteGroupId = invitacion!!.idGrupo
+                         inviteGroupEmail = invitacion!!.email
+                         inviteGroupName = invitacion!!.nombreGrupo
                         arrayListEmails.add(inviteGroupEmail +": "+inviteGroupName )
 
 
@@ -86,6 +94,8 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
         //A continuación viene el método que se ejecuta al presionar un elemento de la lista, en este caso un email
         listView.setOnItemClickListener{parent,view,position,id ->
             //val toast = Toast.makeText(requireContext(),"Has hecho click en la invitación de\n"+invites[position],Toast.LENGTH_LONG)
+            invitePos = position
+
             showBasicDialog(view)
             //toast.setGravity(Gravity.CENTER,0,0)
             //toast.show()
@@ -106,6 +116,28 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
             .setTitle("Confirmación")
 
         val mAlertDialog = mBuilder.show()
+
+        mDialogView.acceptJoinGroupBtn.setOnClickListener{
+            val user = auth.currentUser
+            var miembro = Miembro(user?.uid.toString(),user?.email.toString())
+            var database = FirebaseDatabase.getInstance()
+            val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
+            groupRef.child(inviteGroupId).child("Miembros").child(user?.uid.toString()).setValue(miembro)
+
+
+            //borrar la invitacion aceptada de la base de datos
+
+            val inviteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/"+user?.uid.toString()+"/")
+            inviteRef.child("Invitaciones").child(inviteGroupId).removeValue()
+            arrayListEmails.removeAt(invitePos)
+            arrayAdapter.notifyDataSetChanged()
+            mAlertDialog.dismiss()
+
+        }
+
+        mDialogView.cancelJoinGroup.setOnClickListener{
+            mAlertDialog.dismiss()
+        }
         //mDialogView.EnviarBtn.setOnClickListener{
            // mAlertDialog.dismiss()
             //userEmail = mDialogView.edit_text_email.text.toString()
