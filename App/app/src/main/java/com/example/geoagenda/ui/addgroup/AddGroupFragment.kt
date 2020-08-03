@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
@@ -40,6 +42,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
      var usersList: MutableList<User> = ArrayList()
     private var miembros: ArrayList<Miembro> = ArrayList()
     private lateinit var miembro: Miembro
+    private var correos:ArrayList<String> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -135,48 +138,63 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
             uploadTask.addOnFailureListener {
                 println("Ocurrio un error al subir el archivo")
+
             }.addOnSuccessListener {
                 println("El archivo se ha subido correctamente")
                 activity?.onBackPressed()
+                val toast = Toast.makeText(requireContext(),"Grupo creado con éxito",Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER,0,0)
+                toast.show()
             }
 
 
-
-            //Luego de crear el grupo se realiza el procedimiento para crear la invitacion al usuario que se ingresa en el campo de invitación
-
-            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
-            val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(userEmail)
-
-            Log.e(TAG,"query: " + query.toString())
-            Log.e(TAG,"alo: " + userReference.toString())
-            var invitation = Invitation(user?.email.toString(),group.id,group.name)
-
-
-            //Aquí se crea un listener para obtener el id del email buscado
-            val userListener = object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.e(TAG,"Snapshot: "+snapshot)
-                    if (snapshot.exists()){
-                        for (issue in snapshot.getChildren()) {
-                            val user = issue.getValue(User::class.java)
-                            Log.e(TAG,"Usuario: "+user!!.getUId())
-                            var invitedId = user!!.getUId()
+            //aqui se ve si se entra o no a la opcion de invitaciones si es que el usuario agrega o no un correo, de lo contrario no pasa a esta parte
+            if(correos.size > 0)
+            {
 
 
 
-                            userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
-                            Log.e(TAG,"reference: "+ userReference.toString())
+            for (item in correos){
+
+                //Luego de crear el grupo se realiza el procedimiento para crear la invitacion al usuario que se ingresa en el campo de invitación
+
+                userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
+                val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(item)
+
+                Log.e(TAG,"query: " + query.toString())
+                Log.e(TAG,"alo: " + userReference.toString())
+                var invitation = Invitation(user?.email.toString(),group.id,group.name)
+
+
+                //Aquí se crea un listener para obtener el id del email buscado
+                val userListener = object: ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        Log.e(TAG,"Snapshot: "+snapshot)
+                        if (snapshot.exists()){
+                            for (issue in snapshot.getChildren()) {
+                                val user = issue.getValue(User::class.java)
+                                Log.e(TAG,"Usuario: "+user!!.getUId())
+                                var invitedId = user!!.getUId()
+
+
+
+                                userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
+                                Log.e(TAG,"reference: "+ userReference.toString())
+                            }
+
                         }
+                    }
 
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e(TAG,"falló!!")
                     }
                 }
+                //userReference!!.addValueEventListener(userListener)
+                query.addListenerForSingleValueEvent(userListener)
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG,"falló!!")
-                }
             }
-            //userReference!!.addValueEventListener(userListener)
-            query.addListenerForSingleValueEvent(userListener)
+            }
+
 
 
 
@@ -200,6 +218,7 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
      */
     fun showBasicDialog(view: View?) {
 
+
        val mDialogView = LayoutInflater.from(context).inflate(R.layout.enter_email_invite_dialog,null)
 
         val mBuilder= AlertDialog.Builder(context)
@@ -208,8 +227,39 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
         val mAlertDialog = mBuilder.show()
         mDialogView.EnviarBtn.setOnClickListener{
-            mAlertDialog.dismiss()
+
+            //verificar si el correo existe
             userEmail = mDialogView.edit_text_email.text.toString()
+            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
+            val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(userEmail)
+
+            val userListener = object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.e(TAG,"Snapshot: "+snapshot)
+                    if (snapshot.exists()){
+
+                        correos.add(userEmail)
+
+                        val toast = Toast.makeText(requireContext(),"Correo listo para invitar!",Toast.LENGTH_LONG)
+                        toast.setGravity(Gravity.CENTER,0,0)
+                        toast.show()
+                        mAlertDialog.dismiss()
+                    }
+                    else
+                    {
+                        val toast = Toast.makeText(requireContext(),"El correo ingresado no existe!",Toast.LENGTH_LONG)
+                        toast.setGravity(Gravity.CENTER,0,0)
+                        toast.show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG,"falló!!")
+                }
+            }
+            query.addListenerForSingleValueEvent(userListener)
+
+
         }
 
 

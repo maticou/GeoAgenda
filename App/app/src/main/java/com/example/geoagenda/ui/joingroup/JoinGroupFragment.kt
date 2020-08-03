@@ -34,6 +34,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
     lateinit var inviteGroupEmail: String
     lateinit var listView : ListView
      var invitePos: Int = 0
+    var listInviteID: ArrayList<String> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,8 +72,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
                          inviteGroupEmail = invitacion!!.email
                          inviteGroupName = invitacion!!.nombreGrupo
                         arrayListEmails.add(inviteGroupEmail +": "+inviteGroupName )
-
-
+                        listInviteID.add(inviteGroupId)
                         //userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
                         //Log.e(TAG,"reference: "+ userReference.toString())
                     }
@@ -96,7 +96,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
             //val toast = Toast.makeText(requireContext(),"Has hecho click en la invitación de\n"+invites[position],Toast.LENGTH_LONG)
             invitePos = position
 
-            showBasicDialog(view)
+            showBasicDialog(view, position)
             //toast.setGravity(Gravity.CENTER,0,0)
             //toast.show()
         }
@@ -107,7 +107,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
     }
 
     //Dialogo para confirmar la union a un grupo al cual se le hizo click de la lista de grupos
-    fun showBasicDialog(view: View?) {
+    fun showBasicDialog(view: View?,position: Int) {
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.confirm_join_group,null)
 
@@ -116,20 +116,21 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
             .setTitle("Confirmación")
 
         val mAlertDialog = mBuilder.show()
-
+            Log.e(TAG,"Posicion: "+ position)
         mDialogView.acceptJoinGroupBtn.setOnClickListener{
             val user = auth.currentUser
             var miembro = Miembro(user?.uid.toString(),user?.email.toString())
             var database = FirebaseDatabase.getInstance()
             val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
-            groupRef.child(inviteGroupId).child("Miembros").child(user?.uid.toString()).setValue(miembro)
+            groupRef.child(listInviteID.get(position)).child("Miembros").child(user?.uid.toString()).setValue(miembro)
 
 
             //borrar la invitacion aceptada de la base de datos
 
             val inviteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/"+user?.uid.toString()+"/")
-            inviteRef.child("Invitaciones").child(inviteGroupId).removeValue()
-            arrayListEmails.removeAt(invitePos)
+            inviteRef.child("Invitaciones").child(listInviteID.get(position)).removeValue()
+            arrayListEmails.removeAt(position)
+            listInviteID.removeAt(position)
             arrayAdapter.notifyDataSetChanged()
             mAlertDialog.dismiss()
 
