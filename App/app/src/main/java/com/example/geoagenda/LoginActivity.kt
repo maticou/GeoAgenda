@@ -124,6 +124,7 @@ class LoginActivity : AppCompatActivity() {
         val username: String? = prefs.getString("username", null)
         val avatar: String? = prefs.getString("avatar", null)
         val provider: String? = prefs.getString("provider", null)
+        val currcat: String? = prefs.getString("currcat", null)
 
         if(email != null && username != null && avatar != null && provider != null) {
             showHome(email, username, avatar, ProviderType.valueOf(provider))

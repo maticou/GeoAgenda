@@ -173,6 +173,10 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         var reminderRecording = ""
         var reminderImage = ""
 
+        //asociar id de categoria
+        var reminderCategory = ""
+
+
         //codigo encargado del menu desplegable para seleccionar una ubicacion
         val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
         dropMenu.setAdapter(adapter)
@@ -181,6 +185,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             //Toast.makeText(applicationContext,"Position : $position",Toast.LENGTH_SHORT).show()
             reminder.location = locationsIdList[position]
         }
+
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
@@ -194,6 +199,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 reminderImage = imagePath.toString()
             }
 
+
             reminder.id = reminderID
             reminder.title = titleInput
             reminder.note = noteInput
@@ -204,6 +210,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.year = myYear.toString()
             reminder.hour = myHour.toString()
             reminder.minute = myMinute.toString()
+            reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()
