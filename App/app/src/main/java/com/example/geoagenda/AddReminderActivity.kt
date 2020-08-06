@@ -92,7 +92,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         //Esta linea crea un recordatorio con todos sus campos vacios para luego rellenarlos
         //cuando se termina de crear un recordatorio
-        reminder = Reminder("","","","","", "","","","","","")
+        reminder = Reminder("","","","","", "","","","","","", "")
 
         //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
         val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
