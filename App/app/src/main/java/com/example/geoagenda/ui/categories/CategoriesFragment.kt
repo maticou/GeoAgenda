@@ -1,13 +1,11 @@
 package com.example.geoagenda.ui.categories
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.geoagenda.MainActivity
@@ -21,7 +19,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
-
 
 
 class CategoriesFragment : Fragment(), CategoryViewAdapter.OnCategoryItemClickListener {
@@ -48,13 +45,17 @@ class CategoriesFragment : Fragment(), CategoryViewAdapter.OnCategoryItemClickLi
 
         //println(categoryList.size)
         recycler_view.adapter = CategoryViewAdapter(categoryList, this)
-        recycler_view.layoutManager = GridLayoutManager(this.context, 2)
+        recycler_view.layoutManager = GridLayoutManager(this.context,2)
         recycler_view.setHasFixedSize(true)
     }
     override fun onItemClick(categories: Category, position: Int) {
+        val fragment = CategoriesFragment()
+        val arguments = Bundle()
+        arguments.putString("categ",categories.id )
+        fragment.setArguments(arguments)
         val transaction = (context as MainActivity).supportFragmentManager.beginTransaction()
         Log.d("categoria",categories.title)
-        transaction.replace(R.id.recycler_view,HomeFragment.newInstance())
+        transaction.replace(R.id.category_container,HomeFragment.newInstance(categories.id))
         transaction.addToBackStack(null)
         transaction.commit()
     }
