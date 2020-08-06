@@ -102,6 +102,13 @@
     <string name="open_gallery_button">Abrir Galeria</string>
     <string name="save_image_button">Guardar</string>
     <string name="discard_image_button">Cancelar</string>
+    <string name="unirse_a_un_grupo">Unirse a un grupo</string>
+    <string name="invitaciones_para_unirse_a_grupos">Invitaciones para unirse a grupos</string>
+    <string name="invitaciones_recibidas">Invitaciones recibidas</string>
+    <string name="registrar_correo">Registrar correo</string>
+    <string name="est_seguro_de_que_quiere_unirse_a_este_grupo">Está seguro de que quiere unirse a este grupo?</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 
 
 </resources>

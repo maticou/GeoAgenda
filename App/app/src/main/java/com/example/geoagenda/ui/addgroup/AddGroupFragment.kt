@@ -2,11 +2,11 @@ package com.example.geoagenda.ui.addgroup
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import com.example.geoagenda.ui.group.Group
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.enter_email_invite_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_addgroup.*
@@ -38,6 +35,14 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     public  var imguri: Uri? = null
     lateinit var userList: ArrayList<User>
+    private  var userEmail = ""
+    lateinit var database: FirebaseDatabase
+    private var mDatabase: DatabaseReference? =null
+    private var userReference: DatabaseReference? = null
+     var usersList: MutableList<User> = ArrayList()
+    private var miembros: ArrayList<Miembro> = ArrayList()
+    private lateinit var miembro: Miembro
+    private var correos:ArrayList<String> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,12 +58,19 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
         // INICIALIZAR PRIMERO COMO APARECE A CONTINUACIÓN.
         val btnImg: Button = root.findViewById(R.id.btnImg)
         btnImg.setOnClickListener{
+
+            //Acá estoy probando como buscar la id del usuario pasando el correo, solo puedo hacerlo si ya se la id con anterioridad
+            //Para probarlo hay que hacer click en el botón de agregar imagen
+            mDatabase = FirebaseDatabase.getInstance().getReference()
+
+
             dispatchGalleryIntent()
         }
 
 
+
         //Parámetros para la base de datos en firebase
-        val database = FirebaseDatabase.getInstance()
+         database = FirebaseDatabase.getInstance()
         val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
         val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
         auth = FirebaseAuth.getInstance()
@@ -97,10 +109,26 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
            //Creacion de un grupo al presionar el boton y enviar datos a firebase
 
             groupImage ="${getActivity()?.getExternalCacheDir()?.absolutePath}/${groupID}.jpg"
+
+            //Crear un miembro que será el administrador del grupo a crear
+            miembro = Miembro(user?.uid.toString(),user?.email.toString())
+            var miembro2 = Miembro(user?.uid.toString()+"jaja",user?.email.toString())
+
+            //Agregar el miembro a la lista de miembros (aqui solo irá un miembro que es el admin)
+            miembros.add(miembro)
+
+            //Crear grupo para usuario y para grupos en general
+
             var group = Group(groupID,nombreGrp, desc, user?.uid.toString(),groupImage)
-
-
+            var groupC = GroupC(groupID,nombreGrp,desc,user?.uid.toString(),groupImage,user?.email.toString())
+            val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
+            groupRef.child(groupC.id).setValue(groupC)
             myRef.child(user?.uid.toString()).child("Grupos").child(group.id).setValue(group)
+
+            //Agregar miembro a la lista de miembros en la base de datos (miembro administrador)
+
+            groupRef.child(groupC.id).child("Miembros").child(user?.uid.toString()).setValue(miembro)
+
 
             //se crea el directorio necesario para guardar el archivo en firebase y luego se almacena
             //var imagen = Uri.fromFile(File("${""}/${groupID}.png"))
@@ -110,24 +138,69 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
             uploadTask.addOnFailureListener {
                 println("Ocurrio un error al subir el archivo")
+
             }.addOnSuccessListener {
                 println("El archivo se ha subido correctamente")
                 activity?.onBackPressed()
+                val toast = Toast.makeText(requireContext(),"Grupo creado con éxito",Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.CENTER,0,0)
+                toast.show()
+            }
+
+
+            //aqui se ve si se entra o no a la opcion de invitaciones si es que el usuario agrega o no un correo, de lo contrario no pasa a esta parte
+            if(correos.size > 0)
+            {
+
+
+
+            for (item in correos){
+
+                //Luego de crear el grupo se realiza el procedimiento para crear la invitacion al usuario que se ingresa en el campo de invitación
+
+                userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
+                val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(item)
+
+                Log.e(TAG,"query: " + query.toString())
+                Log.e(TAG,"alo: " + userReference.toString())
+                var invitation = Invitation(user?.email.toString(),group.id,group.name)
+
+
+                //Aquí se crea un listener para obtener el id del email buscado
+                val userListener = object: ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        Log.e(TAG,"Snapshot: "+snapshot)
+                        if (snapshot.exists()){
+                            for (issue in snapshot.getChildren()) {
+                                val user = issue.getValue(User::class.java)
+                                Log.e(TAG,"Usuario: "+user!!.getUId())
+                                var invitedId = user!!.getUId()
+
+
+
+                                userReference!!.child(invitedId).child("Invitaciones").child(group.id).setValue(invitation)
+                                Log.e(TAG,"reference: "+ userReference.toString())
+                            }
+
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e(TAG,"falló!!")
+                    }
+                }
+                //userReference!!.addValueEventListener(userListener)
+                query.addListenerForSingleValueEvent(userListener)
+
+            }
             }
 
 
 
 
-            //Tostadas para testeo del ingreso de campos
-            //val toast = Toast.makeText(context, "Nombre grupo: "+nombreGrp, Toast.LENGTH_LONG)
-            //val toast2 = Toast.makeText(context,"Descripcion: "+desc,Toast.LENGTH_LONG)
-            //toast.setGravity(Gravity.TOP or Gravity.LEFT, 0, 0)
-            //toast2.setGravity(Gravity.TOP or Gravity.RIGHT,0,0)
-            //toast.show()
-            //toast2.show()
-
-
         }
+
+
 
 
         return root
@@ -136,10 +209,15 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
     }
 
+
+
+
+
     /*
     Funcion para mostrar el dialogo para agregar miembros a un grupo
      */
     fun showBasicDialog(view: View?) {
+
 
        val mDialogView = LayoutInflater.from(context).inflate(R.layout.enter_email_invite_dialog,null)
 
@@ -149,8 +227,39 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
         val mAlertDialog = mBuilder.show()
         mDialogView.EnviarBtn.setOnClickListener{
-            mAlertDialog.dismiss()
-            val email = mDialogView.edit_text_email.text.toString()
+
+            //verificar si el correo existe
+            userEmail = mDialogView.edit_text_email.text.toString()
+            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com")
+            val query: Query = userReference!!.child("Correos").orderByChild("Email").equalTo(userEmail)
+
+            val userListener = object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.e(TAG,"Snapshot: "+snapshot)
+                    if (snapshot.exists()){
+
+                        correos.add(userEmail)
+
+                        val toast = Toast.makeText(requireContext(),"Correo listo para invitar!",Toast.LENGTH_LONG)
+                        toast.setGravity(Gravity.CENTER,0,0)
+                        toast.show()
+                        mAlertDialog.dismiss()
+                    }
+                    else
+                    {
+                        val toast = Toast.makeText(requireContext(),"El correo ingresado no existe!",Toast.LENGTH_LONG)
+                        toast.setGravity(Gravity.CENTER,0,0)
+                        toast.show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG,"falló!!")
+                }
+            }
+            query.addListenerForSingleValueEvent(userListener)
+
+
         }
 
 

@@ -54,7 +54,6 @@ class LoginActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.login_button)
         createButton = findViewById(R.id.signup_button)
         googleCreateButton = findViewById(R.id.googleCreateButton)
-
         loginButton.setOnClickListener {
             title = "Autenticación"
 
@@ -180,6 +179,9 @@ class LoginActivity : AppCompatActivity() {
                         // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
                         val myUser = User(user?.uid.toString(), email, username, avatar, ProviderType.GOOGLE)
+                        val correoSinPunto = myUser.email.replace(".","")
+                        myRef.child("Correos").child(correoSinPunto).child("Email").setValue(myUser.email)
+                        myRef.child("Correos").child(correoSinPunto).child("UID").setValue(myUser.id)
                         myRef.child(user?.uid.toString()).child("Datos-Personales").child(myUser.id).setValue(myUser)
                         showHome(email, username, avatar, ProviderType.GOOGLE)
                     }
