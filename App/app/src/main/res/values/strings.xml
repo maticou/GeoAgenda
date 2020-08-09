@@ -89,6 +89,7 @@
     <string name="name">Agregar miembro</string>
     <string name="textview">Agregar miembro</string>
     <string name="todo">TODO</string>
+    <string name="title_category">TITULO</string>
 
     //Crear recordatorio
     <string name="title_reminder">Título</string>
@@ -105,6 +106,9 @@
     <string name="invitaciones_para_unirse_a_grupos">Invitaciones para unirse a grupos</string>
     <string name="invitaciones_recibidas">Invitaciones recibidas</string>
     <string name="registrar_correo">Registrar correo</string>
+    <string name="est_seguro_de_que_quiere_unirse_a_este_grupo">Está seguro de que quiere unirse a este grupo?</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
 
 
 </resources>

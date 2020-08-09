@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -16,7 +17,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
 import android.text.format.DateFormat
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -57,6 +60,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private  var imguri: Uri? = null
     private lateinit var dropMenu: AutoCompleteTextView
     private var locationsList = ArrayList<String>()
+    private var locationsIdList = ArrayList<String>()
+    private lateinit var reminder: Reminder
     var day = 0
     var month: Int = 0
     var year: Int = 0
@@ -74,6 +79,52 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         setContentView(R.layout.activity_add_reminder)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_GALLERY)
+
+        //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
+        val database = FirebaseDatabase.getInstance()
+        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
+        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+
+        //Parametros que se utilizaran en la creacion de un recordatorio
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        var itemId = myRef.child(user?.uid.toString()).push()
+
+        //Esta linea crea un recordatorio con todos sus campos vacios para luego rellenarlos
+        //cuando se termina de crear un recordatorio
+        reminder = Reminder("","","","","", "","","","","","", "")
+
+        //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
+        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+
+        locations_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                locationsList.clear()
+                locationsIdList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    locationsList.add(data.get("nombre").toString())
+                    locationsIdList.add(data.get("id").toString())
+                }
+
+                //codigo para rellenar el campo de ubicacion
+                var locationID = intent.getStringExtra("REMINDER_LOCATION")
+                val locationPosition = locationsIdList.indexOf(locationID)
+
+                if(locationPosition != -1){
+                    dropMenu.setText(locationsList[locationPosition], false)
+                }
+            }
+        })
+
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
 
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
@@ -113,17 +164,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         actionBar.setBackgroundDrawable(backgroundColor)
         actionBar.setDisplayHomeAsUpEnabled(true)
 
-        auth = FirebaseAuth.getInstance()
-
-        //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
-        val database = FirebaseDatabase.getInstance()
-        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
-        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
-
-        //Parametros que se utilizaran en la creacion de un recordatorio
-        val user = auth.currentUser
-        var itemId = myRef.child(user?.uid.toString()).push()
-
         //Le asigno el id de un recordatorio ya creado para
         // actualizarlo, pero si no existe, se crea desde cero
         var reminderID = intent.getStringExtra("REMINDER_ID")
@@ -132,6 +172,20 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         }
         var reminderRecording = ""
         var reminderImage = ""
+
+        //asociar id de categoria
+        var reminderCategory = ""
+
+
+        //codigo encargado del menu desplegable para seleccionar una ubicacion
+        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
+        dropMenu.setAdapter(adapter)
+        dropMenu.onItemClickListener = AdapterView.OnItemClickListener{
+                parent,view, position, id->
+            //Toast.makeText(applicationContext,"Position : $position",Toast.LENGTH_SHORT).show()
+            reminder.location = locationsIdList[position]
+        }
+
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
@@ -144,8 +198,19 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             if(reminderImage == "") {
                 reminderImage = imagePath.toString()
             }
-            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording,
-                reminderImage, myDay.toString(), myMonth.toString(), myYear.toString(), myHour.toString(), myMinute.toString())
+
+
+            reminder.id = reminderID
+            reminder.title = titleInput
+            reminder.note = noteInput
+            reminder.recording = reminderRecording
+            reminder.image = reminderImage
+            reminder.day = myDay.toString()
+            reminder.month =  myMonth.toString()
+            reminder.year = myYear.toString()
+            reminder.hour = myHour.toString()
+            reminder.minute = myMinute.toString()
+            reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()
@@ -258,36 +323,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         alarmButton.setOnClickListener {
             showDateTimeDialog()
         }
-
-        //codigo encargado del spinner para seleccionar ubicacion
-        dropMenu = findViewById(R.id.filled_exposed_dropdown)
-        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
-
-        locations_ref.addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-                //error al obtener datos
-            }
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val values = snapshot.children
-                locationsList.clear()
-
-                values.forEach {
-                    val data = it.value as HashMap<String, String>
-
-                    val newLocation = Location(data.get("id").toString(),
-                        data.get("nombre").toString(),
-                        data.get("latitud") as Double,
-                        data.get("longitud") as Double)
-
-                    locationsList.add(data.get("nombre").toString())
-                }
-            }
-        })
-
-        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
-
-        dropMenu.setAdapter(adapter)
     }
 
     private fun showDateTimeDialog() {

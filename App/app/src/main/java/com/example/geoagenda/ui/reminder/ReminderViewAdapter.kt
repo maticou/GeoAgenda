@@ -44,7 +44,7 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
             image.setImageURI(Uri.parse(item.image))
             title.text = item.title
             note.text = item.note
-            if (item.month != "0" && item.month != "null") {
+            if (item.month != "0") {
                 alarmIcon.setImageResource(R.drawable.ic_alarm_on)
                 val text: String = "Fecha: " + item.day + "/" + item.month + "/" + item.year + "   Hora: " + item.hour + ":" + item.minute
                 time.text = text
