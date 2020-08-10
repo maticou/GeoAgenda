@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geoagenda.R
+import kotlinx.android.synthetic.main.reminder_card.*
 import kotlinx.android.synthetic.main.reminder_card.view.*
 import java.io.File
 
@@ -39,6 +40,7 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
         val note: TextView = reminderCard.reminder_note
         val alarmIcon: ImageView = reminderCard.alarm_icon
         val recordingIcon: ImageView = reminderCard.recording_icon
+        val locationIcon: ImageView = reminderCard.location_icon
 
         fun initialize(item: Reminder, action: OnReminderItemClickListener) {
             image.setImageURI(Uri.parse(item.image))
@@ -53,6 +55,10 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
 
             if(item.recording != "null"){
                 recordingIcon.setImageResource(R.drawable.ic_keyboard_voice_green)
+            }
+
+            if(item.location != ""){
+                locationIcon.setImageResource(R.drawable.ic_location_green)
             }
 
             itemView.setOnClickListener {

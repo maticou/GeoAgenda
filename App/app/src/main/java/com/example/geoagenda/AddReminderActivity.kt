@@ -2,10 +2,7 @@ package com.example.geoagenda
 
 
 import android.Manifest
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
+import android.app.*
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -40,6 +37,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import com.example.geoagenda.ui.addlocation.Location
 import kotlinx.android.synthetic.main.fragment_joingroup.*
+import kotlinx.android.synthetic.main.reminder_card.*
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
@@ -125,6 +123,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         })
 
         dropMenu = findViewById(R.id.filled_exposed_dropdown)
+
 
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
