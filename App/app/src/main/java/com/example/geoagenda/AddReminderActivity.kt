@@ -2,8 +2,8 @@ package com.example.geoagenda
 
 
 import android.Manifest
-import android.app.Activity
-import android.app.Dialog
+import android.app.*
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -13,7 +13,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Html
+import android.text.format.DateFormat
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -22,18 +25,25 @@ import androidx.core.app.ActivityCompat
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
-import kotlinx.android.synthetic.main.add_image_popup_layout.*
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.collections.HashMap
+import com.example.geoagenda.ui.addlocation.Location
+import kotlinx.android.synthetic.main.fragment_joingroup.*
+import kotlinx.android.synthetic.main.reminder_card.*
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
 
-class AddReminderActivity : AppCompatActivity() {
+class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private lateinit var auth: FirebaseAuth
     private var recording: Boolean = true
@@ -46,6 +56,20 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
+    private lateinit var dropMenu: AutoCompleteTextView
+    private var locationsList = ArrayList<String>()
+    private var locationsIdList = ArrayList<String>()
+    private lateinit var reminder: Reminder
+    var day = 0
+    var month: Int = 0
+    var year: Int = 0
+    var hour: Int = 0
+    var minute: Int = 0
+    var myDay = 0
+    var myMonth: Int = 0
+    var myYear: Int = 0
+    var myHour: Int = 0
+    var myMinute: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,11 +78,74 @@ class AddReminderActivity : AppCompatActivity() {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_GALLERY)
 
+        //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
+        val database = FirebaseDatabase.getInstance()
+        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
+        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+
+        //Parametros que se utilizaran en la creacion de un recordatorio
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        var itemId = myRef.child(user?.uid.toString()).push()
+
+        //Esta linea crea un recordatorio con todos sus campos vacios para luego rellenarlos
+        //cuando se termina de crear un recordatorio
+        reminder = Reminder("","","","","", "","","","","","", "")
+
+        //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
+        val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+
+        locations_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                locationsList.clear()
+                locationsIdList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    locationsList.add(data.get("nombre").toString())
+                    locationsIdList.add(data.get("id").toString())
+                }
+
+                //codigo para rellenar el campo de ubicacion
+                var locationID = intent.getStringExtra("REMINDER_LOCATION")
+                val locationPosition = locationsIdList.indexOf(locationID)
+
+                if(locationPosition != -1){
+                    dropMenu.setText(locationsList[locationPosition], false)
+                }
+            }
+        })
+
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
+
+
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
         note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
         recordingPath = intent.getStringExtra("REMINDER_AUDIO")
         imagePath = intent.getStringExtra("REMINDER_IMAGE")
+
+        if(!intent.getStringExtra("REMINDER_DAY").isNullOrEmpty()){
+            myDay = intent.getStringExtra("REMINDER_DAY").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_MONTH").isNullOrEmpty()){
+            myMonth = intent.getStringExtra("REMINDER_MONTH").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_YEAR").isNullOrEmpty()){
+            myYear = intent.getStringExtra("REMINDER_YEAR").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_HOUR").isNullOrEmpty()){
+            myHour = intent.getStringExtra("REMINDER_HOUR").toInt()
+        }
+        if(!intent.getStringExtra("REMINDER_MINUTE").isNullOrEmpty()){
+            myMinute = intent.getStringExtra("REMINDER_MINUTE").toInt()
+        }
 
         //Estos valores modifican datos de la barra de la ventana para crear recordatorios
         val actionBar = supportActionBar
@@ -76,17 +163,6 @@ class AddReminderActivity : AppCompatActivity() {
         actionBar.setBackgroundDrawable(backgroundColor)
         actionBar.setDisplayHomeAsUpEnabled(true)
 
-        auth = FirebaseAuth.getInstance()
-
-        //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
-        val database = FirebaseDatabase.getInstance()
-        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://mementos-da7d9.appspot.com")
-        val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
-
-        //Parametros que se utilizaran en la creacion de un recordatorio
-        val user = auth.currentUser
-        var itemId = myRef.child(user?.uid.toString()).push()
-
         //Le asigno el id de un recordatorio ya creado para
         // actualizarlo, pero si no existe, se crea desde cero
         var reminderID = intent.getStringExtra("REMINDER_ID")
@@ -95,6 +171,20 @@ class AddReminderActivity : AppCompatActivity() {
         }
         var reminderRecording = ""
         var reminderImage = ""
+
+        //asociar id de categoria
+        var reminderCategory = ""
+
+
+        //codigo encargado del menu desplegable para seleccionar una ubicacion
+        val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
+        dropMenu.setAdapter(adapter)
+        dropMenu.onItemClickListener = AdapterView.OnItemClickListener{
+                parent,view, position, id->
+            //Toast.makeText(applicationContext,"Position : $position",Toast.LENGTH_SHORT).show()
+            reminder.location = locationsIdList[position]
+        }
+
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
@@ -107,7 +197,19 @@ class AddReminderActivity : AppCompatActivity() {
             if(reminderImage == "") {
                 reminderImage = imagePath.toString()
             }
-            var reminder = Reminder(reminderID,titleInput, noteInput, reminderRecording, reminderImage)
+
+
+            reminder.id = reminderID
+            reminder.title = titleInput
+            reminder.note = noteInput
+            reminder.recording = reminderRecording
+            reminder.image = reminderImage
+            reminder.day = myDay.toString()
+            reminder.month =  myMonth.toString()
+            reminder.year = myYear.toString()
+            reminder.hour = myHour.toString()
+            reminder.minute = myMinute.toString()
+            reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             onBackPressed()
@@ -161,7 +263,7 @@ class AddReminderActivity : AppCompatActivity() {
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
-
+                add_voice_recording.setImageDrawable(resources.getDrawable(R.drawable.ic_keyboard_voice_green))
                 voiceRecordingDialog.dismiss()
             }
 
@@ -204,6 +306,7 @@ class AddReminderActivity : AppCompatActivity() {
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
+                add_image.setImageDrawable(resources.getDrawable(R.drawable.ic_photo_green))
                 addImageDialog.dismiss()
             }
 
@@ -214,6 +317,20 @@ class AddReminderActivity : AppCompatActivity() {
             addImageDialog.show()
 
         }
+
+
+        alarmButton.setOnClickListener {
+            showDateTimeDialog()
+        }
+    }
+
+    private fun showDateTimeDialog() {
+        val calendar: Calendar = Calendar.getInstance()
+        day = calendar.get(Calendar.DAY_OF_MONTH)
+        month = calendar.get(Calendar.MONTH)
+        year = calendar.get(Calendar.YEAR)
+        val datePickerDialog = DatePickerDialog(this, R.style.DialogTheme, this, year, month,day)
+        datePickerDialog.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -279,5 +396,25 @@ class AddReminderActivity : AppCompatActivity() {
         else{
 
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        myDay = day
+        myYear = year
+        myMonth = month
+        val calendar: Calendar = Calendar.getInstance()
+        hour = calendar.get(Calendar.HOUR)
+        minute = calendar.get(Calendar.MINUTE)
+        val timePickerDialog = TimePickerDialog(this, R.style.DialogTheme, this, hour, minute, DateFormat.is24HourFormat(this))
+        timePickerDialog.show()
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        myHour = hourOfDay
+        myMinute = minute
+        //val text: String = "Year: " + myYear + "\n" + "Month: " + myMonth + "\n" + "Day: " + myDay + "\n" + "Hour: " + myHour + "\n" + "Minute: " + myMinute
+        //Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+        alarmButton.setImageDrawable(resources.getDrawable(R.drawable.ic_alarm_on))
     }
 }

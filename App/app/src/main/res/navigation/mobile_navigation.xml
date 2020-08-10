@@ -65,5 +65,11 @@
         android:label="@string/menu_groups_edit"
         tools:layout="@layout/fragment_editgroup"/>
 
+    <fragment
+        android:id="@+id/join_group"
+        android:name="com.example.geoagenda.ui.joingroup.JoinGroupFragment"
+        android:label="Unirse a un grupo"
+        tools:layout="@layout/fragment_joingroup" />
+
 
 </navigation>
