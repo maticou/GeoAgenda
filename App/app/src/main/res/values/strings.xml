@@ -109,6 +109,7 @@
     <string name="est_seguro_de_que_quiere_unirse_a_este_grupo">Está seguro de que quiere unirse a este grupo?</string>
     <string name="si">Si</string>
     <string name="no">No</string>
+    <string name="notification">Nueva Notificación</string>
 
 
 </resources>
