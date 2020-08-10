@@ -70,6 +70,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     var myYear: Int = 0
     var myHour: Int = 0
     var myMinute: Int = 0
+    private val mNotificationTime = Calendar.getInstance().timeInMillis + 20000 //Set after 5 seconds from the current time.
+    private var mNotified = false
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -212,6 +214,11 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
+            if (!mNotified) {
+                if(reminder.day != "0"){
+                    NotificationUtils().setNotification(mNotificationTime, this@AddReminderActivity)
+                }
+            }
             onBackPressed()
         }
 
