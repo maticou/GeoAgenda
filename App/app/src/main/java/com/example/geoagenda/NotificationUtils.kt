@@ -9,7 +9,7 @@ import java.util.*
 class NotificationUtils {
 
 
-    fun setNotification(timeInMilliSeconds: Long, activity: Activity) {
+    fun setNotification(timeInMilliSeconds: Long, titulo: String, nota: String, activity: Activity) {
 
         //------------  alarm settings start  -----------------//
 
@@ -21,6 +21,8 @@ class NotificationUtils {
 
             alarmIntent.putExtra("reason", "notification")
             alarmIntent.putExtra("timestamp", timeInMilliSeconds)
+            alarmIntent.putExtra("titulo", titulo)
+            alarmIntent.putExtra("nota", nota)
 
 
             val calendar = Calendar.getInstance()

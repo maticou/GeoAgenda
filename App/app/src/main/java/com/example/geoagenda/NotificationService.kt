@@ -8,11 +8,14 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import androidx.core.app.JobIntentService
 import java.util.*
 
-class NotificationService  : IntentService("NotificationService") {
+class NotificationService  : IntentService("NotificationService"){
     private lateinit var mNotification: Notification
-    private val mNotificationId: Int = 1000
+    private val mNotificationId: Int = (800..1100).random()
+    private var mTitle: String = ""
+    private var mNote: String = ""
 
     @SuppressLint("NewApi")
     private fun createChannel() {
@@ -32,7 +35,7 @@ class NotificationService  : IntentService("NotificationService") {
             notificationChannel.setShowBadge(true)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.parseColor("#e8334a")
-            notificationChannel.description = getString(R.string.cancelar) + " hahsjahshias sdfasf"
+            notificationChannel.description = getString(R.string.notificationChannel)
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(notificationChannel)
         }
@@ -47,14 +50,16 @@ class NotificationService  : IntentService("NotificationService") {
 
 
     override fun onHandleIntent(intent: Intent?) {
-
-        //Create Channel
         createChannel()
 
 
         var timestamp: Long = 0
-        if (intent != null && intent.extras != null) {
-            timestamp = intent.extras!!.getLong("timestamp")
+        if (intent != null) {
+            if (intent.extras != null) {
+                timestamp = intent.extras!!.getLong("timestamp")
+                mTitle = intent.extras!!.getString("titulo").toString()
+                mNote = intent.extras!!.getString("nota").toString()
+            }
         }
 
 
@@ -65,8 +70,8 @@ class NotificationService  : IntentService("NotificationService") {
             var notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val notifyIntent = Intent(this, ResultActivity::class.java)
 
-            val title = "Sample Notification"
-            val message = "You have received a sample notification. This notification will take you to the details page."
+            val title = mTitle
+            val message = mNote
 
             notifyIntent.putExtra("title", title)
             notifyIntent.putExtra("message", message)
@@ -118,7 +123,5 @@ class NotificationService  : IntentService("NotificationService") {
             // mNotificationId is a unique int for each notification that you must define
             notificationManager.notify(mNotificationId, mNotification)
         }
-
-
     }
 }
