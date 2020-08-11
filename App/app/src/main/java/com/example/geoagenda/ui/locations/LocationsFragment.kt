@@ -1,6 +1,7 @@
 package com.example.geoagenda.ui.locations
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_locations.*
 
-class LocationsFragment : Fragment() {
+class LocationsFragment : Fragment(), LocationViewAdapter.OnLocationItemClickListener {
 
     private lateinit var locationsViewModel: LocationsViewModel
     lateinit var addLocationButton: Button
@@ -42,9 +43,13 @@ class LocationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //println(reminderList.size)
-        locationRecyclerView.adapter = LocationViewAdapter(locationList)
+        locationRecyclerView.adapter = LocationViewAdapter(locationList, this)
         locationRecyclerView.layoutManager = LinearLayoutManager(this.context)
         locationRecyclerView.setHasFixedSize(true)
+    }
+
+    override fun onItemClick(location: Location, position: Int){
+        Log.d("mensaje", "el id: "+ location.id)
     }
 
     private fun getLocations(){
