@@ -114,7 +114,7 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                     if (cate == "St"){
                         val newReminder = Reminder(
                             data.get("id").toString(),
-                            data.get("tittle").toString(),
+                            data.get("title").toString(),
                             data.get("note").toString(),
                             data.get("recording").toString(),
                             data.get("location").toString(),
@@ -131,7 +131,7 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                         if (data.get("category")==cate){
                             val newReminder = Reminder(
                                 data.get("id").toString(),
-                                data.get("tittle").toString(),
+                                data.get("title").toString(),
                                 data.get("note").toString(),
                                 data.get("recording").toString(),
                                 data.get("location").toString(),
