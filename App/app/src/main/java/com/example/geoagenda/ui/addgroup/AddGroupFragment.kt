@@ -154,7 +154,8 @@ class AddGroupFragment : Fragment(), View.OnClickListener {
 
 
 
-            for (item in correos){
+            for (item in correos)
+            {
 
                 //Luego de crear el grupo se realiza el procedimiento para crear la invitacion al usuario que se ingresa en el campo de invitación
 

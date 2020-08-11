@@ -55,6 +55,10 @@
                     android:id="@+id/join_group"
                     android:icon="@drawable/ic_menu_group_add_black_24dp"
                     android:title="@string/unirse_a_un_grupo" />
+                <item
+                    android:id="@+id/delete_group"
+                    android:icon="@drawable/ic_menu_group_add_black_24dp"
+                    android:title="Eliminar grupo" />
             </group>
         </menu>
     </item>
