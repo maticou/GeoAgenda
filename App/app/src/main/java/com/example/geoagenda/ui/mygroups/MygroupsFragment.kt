@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,8 +25,12 @@ class MygroupsFragment : Fragment() {
     private lateinit var mygroupsViewModel: MygroupsViewModel
     private var userReference: DatabaseReference? = null
     private lateinit var auth: FirebaseAuth
-    var groupIds: ArrayList<String> = ArrayList()
+     var groupIds: ArrayList<String> = ArrayList()
     lateinit var idGroup: String
+    lateinit var arrayAdapter: ArrayAdapter<String>
+    lateinit var listView : ListView
+    lateinit var nombreGrupo: String
+    lateinit var correoAdmin: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +44,7 @@ class MygroupsFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
-
+        listView = root.findViewById<ListView>(R.id.my_groups_list)
         userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/"+user?.uid+"/Grupos/")
         val query: Query = userReference!!.orderByChild("id")
 
@@ -52,11 +57,17 @@ class MygroupsFragment : Fragment() {
                         val group = issue.getValue(GroupD::class.java)
                         //Log.e(ContentValues.TAG,"IDs: "+group!!.getAdminId())
                         idGroup = group!!.getId()
-                        groupIds.add(idGroup)
+
+                        nombreGrupo = group!!.getName()
+                        correoAdmin = group!!.getAdminEmail()
+                        groupIds.add(nombreGrupo)
+
                         Log.e(ContentValues.TAG,"group id"+ idGroup)
 
                     }
-
+                    arrayAdapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,groupIds)
+                    listView.adapter = arrayAdapter
+                    arrayAdapter.notifyDataSetChanged()
                     Log.e(TAG,"lista de ids:"+groupIds)
 
                 }

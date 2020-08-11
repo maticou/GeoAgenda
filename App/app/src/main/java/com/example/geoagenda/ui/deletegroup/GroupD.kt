@@ -7,7 +7,7 @@ class GroupD {
     private var adminId: String = ""
     private var image: String = ""
     private var adminEmail: String = ""
-    private var miembros: ArrayList<String> = ArrayList()
+    private var Miembros: ArrayList<Miembro> = ArrayList()
 
     constructor()
 
@@ -18,7 +18,7 @@ class GroupD {
         adminId: String,
         image: String,
         adminEmail: String,
-        miembros: ArrayList<String>
+        Miembros: ArrayList<Miembro>
     ) {
         this.id = id
         this.name = name
@@ -26,7 +26,7 @@ class GroupD {
         this.adminId = adminId
         this.image = image
         this.adminEmail = adminEmail
-        this.miembros = miembros
+        this.Miembros = Miembros
     }
 
     fun getId(): String {
@@ -53,7 +53,7 @@ class GroupD {
         return adminEmail
     }
 
-    fun getMiembrosList (): ArrayList<String>{
-        return miembros
+    fun getMiembrosList (): ArrayList<Miembro>{
+        return Miembros
     }
 }

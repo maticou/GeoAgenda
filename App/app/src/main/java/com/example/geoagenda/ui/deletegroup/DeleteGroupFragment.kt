@@ -40,9 +40,12 @@ class DeleteGroupFragment: Fragment(), View.OnClickListener {
     lateinit var adminGroupName: String
     lateinit var adminGroupAdminId: String
 
+
     //Listas
     var adminGroupEmails: ArrayList<String> = ArrayList()
     var adminGroupIDList: ArrayList<String> = ArrayList()
+    var miembrosGrupo: ArrayList<com.example.geoagenda.ui.deletegroup.Miembro> = ArrayList()
+    var groupMemberList: ArrayList<String> = ArrayList()
     lateinit var arrayAdapter: ArrayAdapter<String>
 
     var groupPos = 0
@@ -87,9 +90,10 @@ class DeleteGroupFragment: Fragment(), View.OnClickListener {
                         adminGroupEmails.add(adminGroupEmail+ ": "+ adminGroupName)
                         adminGroupIDList.add(adminGroupId)
 
-                        Log.e(TAG,"admin group id"+ adminGroupId)
+                        Log.e(TAG,"admin group id "+ adminGroupId)
                         Log.e(TAG,"admin group email"+adminGroupEmail)
                         Log.e(TAG,"admin group name"+adminGroupName)
+                        Log.e(TAG,"miembros del grupo"+miembrosGrupo)
 
                     }
                     arrayAdapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,adminGroupEmails)
@@ -104,6 +108,9 @@ class DeleteGroupFragment: Fragment(), View.OnClickListener {
                         showBasicDialog(view, position)
                     }
 
+                    //Encontrar miembros de los grupos
+
+
 
                 }
             }
@@ -113,11 +120,23 @@ class DeleteGroupFragment: Fragment(), View.OnClickListener {
             }
         }
         query.addListenerForSingleValueEvent(userListener)
+
+
+
+
+
+
+
         return root
     }
 
 
     fun showBasicDialog(view: View?,position: Int) {
+
+        Log.e(TAG,"id de miembros: ")
+
+
+
 
         val mDialogView = LayoutInflater.from(context).inflate(R.layout.confirm_delete_group,null)
 
@@ -127,44 +146,53 @@ class DeleteGroupFragment: Fragment(), View.OnClickListener {
 
         val mAlertDialog = mBuilder.show()
         Log.e(TAG,"Posicion: "+ position)
+
+
         mDialogView.buttonSi.setOnClickListener{
-            /*
-            val user = auth.currentUser
-            var miembro = Miembro(user?.uid.toString(),user?.email.toString())
-            var database = FirebaseDatabase.getInstance()
-            val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
-            groupRef.child(adminGroupIDList.get(position)).child("Miembros").child(user?.uid.toString()).setValue(miembro)
+
+            //primero borrar del grupo en su lista de grupos en los miembros del grupo
+            //Eliminar el grupo del miembro en su lista de grupos
+            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/"+adminGroupIDList.get(position)+"/Miembros/")
+            val queryMiembros: Query = userReference!!.orderByChild("id")
 
 
-            //borrar la invitacion aceptada de la base de datos
+            val memberListener = object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.e(TAG,"miembros: "+snapshot)
+                    if (snapshot.exists()){
+                        for (issue in snapshot.getChildren()) {
 
-            val inviteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/"+user?.uid.toString()+"/")
-            inviteRef.child("Invitaciones").child(listInviteID.get(position)).removeValue()
-            arrayListEmails.removeAt(position)
-            listInviteID.removeAt(position)
-            arrayAdapter.notifyDataSetChanged()*/
+                            val miembro = issue.getValue(com.example.geoagenda.ui.deletegroup.Miembro::class.java)
+                            Log.e(TAG,"ID miembro: "+ miembro!!.getId())
 
-            val database = FirebaseDatabase.getInstance()
-            val deleteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
-            Log.d(TAG,"ID a borrar: "+ adminGroupIDList.get(position))
-            deleteRef.child(adminGroupIDList.get(position)).removeValue()
-            adminGroupEmails.removeAt(position)
-            arrayAdapter.notifyDataSetChanged()
+                            userReference = FirebaseDatabase.getInstance().getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/"+miembro!!.getId()+"/Grupos/")
+                            userReference!!.child(adminGroupIDList.get(position)).removeValue()
+
+                        }
+
+                        //Luego se borra el grupo completo
 
 
-            val deleteGroupMiembros = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+                        val database = FirebaseDatabase.getInstance()
+                        val deleteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
+                        Log.d(TAG,"ID a borrar: "+ adminGroupIDList.get(position))
+                        deleteRef.child(adminGroupIDList.get(position)).removeValue()
+                        adminGroupEmails.removeAt(position)
+                        arrayAdapter.notifyDataSetChanged()
 
-            mAlertDialog.dismiss()
 
-        }
+                    }
+                }
 
-        mDialogView.buttonNo.setOnClickListener{
-            val database = FirebaseDatabase.getInstance()
-            val deleteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
-            Log.d(TAG,"ID a borrar: "+ adminGroupIDList.get(position))
-            deleteRef.child(adminGroupIDList.get(position)).removeValue()
-            adminGroupEmails.removeAt(position)
-            arrayAdapter.notifyDataSetChanged()
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG,"falló!!")
+                }
+            }
+            queryMiembros.addListenerForSingleValueEvent(memberListener)
+
+
+
+
             mAlertDialog.dismiss()
         }
 
