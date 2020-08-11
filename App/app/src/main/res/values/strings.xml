@@ -110,12 +110,18 @@
     <string name="est_seguro_de_que_quiere_unirse_a_este_grupo">Está seguro de que quiere unirse a este grupo?</string>
     <string name="si">Si</string>
     <string name="no">No</string>
+
+    <string name="grupos_que_administras">Grupos que administras</string>
+    <string name="grupos">Grupos</string>
+    <string name="seguro_de_eliminar_el_grupo">¿Seguro de eliminar el grupo?</string>
+
     <string name="cerrar">Cerrar</string>
 
 
     //Notificaciones
     <string name="notification">Recordatorio</string>
     <string name="notificationChannel">Este es el canal de notificaciones para la aplicación de recordatorios Mementos.</string>
+
 
 
 </resources>
