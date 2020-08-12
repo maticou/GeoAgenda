@@ -61,6 +61,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private var locationsIdList = ArrayList<String>()
     private var categoriesList = ArrayList<String>()
     private var categoriesIdList = ArrayList<String>()
+    private var category: String = ""
     private lateinit var reminder: Reminder
     var day: Int = 0
     var month: Int = 0
@@ -153,7 +154,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 val categoryPosition = categoriesIdList.indexOf(categoryID)
 
                 if(categoryPosition != -1){
-                    dropMenucat.setText(locationsList[categoryPosition], false)
+                    dropMenucat.setText(categoriesList[categoryPosition], false)
                 }
             }
         })
