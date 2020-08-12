@@ -48,11 +48,11 @@ class HomeFragment : Fragment(), ReminderViewAdapter.OnReminderItemClickListener
                 ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
+
         val addreminder: FloatingActionButton = root.findViewById(R.id.addreminder)
         addreminder.setOnClickListener { view ->
             (activity as MainActivity).addReminder()
         }
-
         getReminders()
 
         return root

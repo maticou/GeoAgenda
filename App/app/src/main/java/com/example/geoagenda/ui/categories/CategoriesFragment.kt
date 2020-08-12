@@ -13,12 +13,15 @@ import com.example.geoagenda.R
 import com.example.geoagenda.ui.Category.Category
 import com.example.geoagenda.ui.Category.CategoryViewAdapter
 import com.example.geoagenda.ui.home.HomeFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.fragment_categories.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.recycler_view
 
 
 class CategoriesFragment : Fragment(), CategoryViewAdapter.OnCategoryItemClickListener {
@@ -34,6 +37,11 @@ class CategoriesFragment : Fragment(), CategoryViewAdapter.OnCategoryItemClickLi
         categoriesViewModel =
                 ViewModelProviders.of(this).get(CategoriesViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_categories, container, false)
+
+        val addcategory: FloatingActionButton = root.findViewById(R.id.addcategory)
+        addcategory.setOnClickListener { view ->
+            (activity as MainActivity).addCategory()
+        }
 
         getCategories()
 
@@ -54,9 +62,8 @@ class CategoriesFragment : Fragment(), CategoryViewAdapter.OnCategoryItemClickLi
         arguments.putString("categ",categories.id )
         fragment.setArguments(arguments)
         val transaction = (context as MainActivity).supportFragmentManager.beginTransaction()
-        Log.d("categoria",categories.title)
+
         transaction.replace(R.id.category_container,HomeFragment.newInstance(categories.id))
-        transaction.addToBackStack(null)
         transaction.commit()
     }
 
