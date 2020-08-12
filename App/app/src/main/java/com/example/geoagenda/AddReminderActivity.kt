@@ -59,8 +59,11 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
     private lateinit var dropMenu: AutoCompleteTextView
+    private lateinit var dropMenucat: AutoCompleteTextView
     private var locationsList = ArrayList<String>()
     private var locationsIdList = ArrayList<String>()
+    private var categoriesList = ArrayList<String>()
+    private var categoriesIdList = ArrayList<String>()
     private lateinit var reminder: Reminder
     var day: Int = 0
     var month: Int = 0
@@ -99,6 +102,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
         val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+        //igual para las categorias
+        val categories_ref = myRef.child(user?.uid.toString()).child("Categorias")
 
         locations_ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -127,8 +132,35 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             }
         })
 
-        dropMenu = findViewById(R.id.filled_exposed_dropdown)
 
+        categories_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                categoriesList.clear()
+                categoriesIdList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    categoriesList.add(data.get("title").toString())
+                    categoriesIdList.add(data.get("id").toString())
+                }
+
+                //codigo para rellenar el campo de categoria
+                var categoryID = intent.getStringExtra("REMINDER_CATEGORY")
+                val categoryPosition = categoriesIdList.indexOf(categoryID)
+
+                if(categoryPosition != -1){
+                    dropMenucat.setText(locationsList[categoryPosition], false)
+                }
+            }
+        })
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
+        dropMenucat = findViewById(R.id.filled_exposed_dropdown_cat)
 
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
@@ -177,9 +209,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         var reminderRecording = ""
         var reminderImage = ""
 
-        //asociar id de categoria
-        var reminderCategory = ""
-
 
         //codigo encargado del menu desplegable para seleccionar una ubicacion
         val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
@@ -190,6 +219,14 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.location = locationsIdList[position]
         }
 
+        //codigo encargado del menu desplegable para seleccionar una categoria
+        val adapter2 = ArrayAdapter<String>(this, R.layout.drop_menu_item, categoriesList )
+        dropMenucat.setAdapter(adapter2)
+        dropMenucat.onItemClickListener = AdapterView.OnItemClickListener{
+                parent,view, position, id->
+            //Toast.makeText(applicationContext,"Position : $position",Toast.LENGTH_SHORT).show()
+            reminder.category = categoriesIdList[position]
+        }
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
@@ -214,7 +251,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.year = myYear.toString()
             reminder.hour = myHour.toString()
             reminder.minute = myMinute.toString()
-            reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             if (!mNotified) {

@@ -107,6 +107,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun addCategory(){
+        val intent = Intent(this, AddCategoryActivity::class.java)
+        startActivity(intent)
+    }
+
     private class DownLoadImageTask(internal val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
         override fun doInBackground(vararg urls: String): Bitmap? {
             val urlOfImage = urls[0]
