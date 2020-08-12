@@ -22,6 +22,7 @@
     <string name="menu_locations_new">Nueva ubicación</string>
     <string name="write_address">Dirección</string>
     <string name="menu_locations_edit">Editar ubicación</string>
+    <string name="menu_locations_delete">Eliminar</string>
 
     //submenu grupos
     <string name="menu_groups_title">Grupos</string>
@@ -100,6 +101,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="ingresa_un_email">Ingresa un email</string>
     <string name="open_gallery_button">Abrir Galeria</string>
+    <string name="open_camera_button">Abrir Camara</string>
     <string name="save_image_button">Guardar</string>
     <string name="discard_image_button">Cancelar</string>
     <string name="unirse_a_un_grupo">Unirse a un grupo</string>
@@ -109,6 +111,11 @@
     <string name="est_seguro_de_que_quiere_unirse_a_este_grupo">Está seguro de que quiere unirse a este grupo?</string>
     <string name="si">Si</string>
     <string name="no">No</string>
+
+    <string name="grupos_que_administras">Grupos que administras</string>
+    <string name="grupos">Grupos</string>
+    <string name="seguro_de_eliminar_el_grupo">¿Seguro de eliminar el grupo?</string>
+
     <string name="cerrar">Cerrar</string>
 
 
@@ -116,5 +123,9 @@
     <string name="notification">Recordatorio</string>
     <string name="notificationChannel">Este es el canal de notificaciones para la aplicación de recordatorios Mementos.</string>
 
+
+    <string name="play">Reproducir</string>
+    <string name="record">Grabar</string>
+    <string name="stop">Parar</string>
 
 </resources>

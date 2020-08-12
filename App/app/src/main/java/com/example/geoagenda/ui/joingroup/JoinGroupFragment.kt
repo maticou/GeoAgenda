@@ -17,10 +17,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.geoagenda.R
 import com.example.geoagenda.ui.addgroup.GroupC
 import com.example.geoagenda.ui.addgroup.Miembro
+import com.example.geoagenda.ui.group.Group
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.confirm_join_group.view.*
 import kotlinx.android.synthetic.main.enter_email_invite_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_addgroup.*
 
 
 class JoinGroupFragment: Fragment(), View.OnClickListener {
@@ -32,6 +34,7 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
     lateinit var inviteGroupId : String
     lateinit var inviteGroupName: String
     lateinit var inviteGroupEmail: String
+    lateinit var inviteGroupDesc: String
     lateinit var listView : ListView
      var invitePos: Int = 0
     var listInviteID: ArrayList<String> = ArrayList()
@@ -124,6 +127,11 @@ class JoinGroupFragment: Fragment(), View.OnClickListener {
             val groupRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/grupos/")
             groupRef.child(listInviteID.get(position)).child("Miembros").child(user?.uid.toString()).setValue(miembro)
 
+            //añadir grupo a la lista de grupos del usuario que acepta
+
+            var group = GroupF(listInviteID.get(position),inviteGroupName)
+            val myRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/")
+            myRef.child(user?.uid.toString()).child("Grupos").child(listInviteID.get(position)).setValue(group)
 
             //borrar la invitacion aceptada de la base de datos
 
