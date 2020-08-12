@@ -26,6 +26,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/open_gallery_button" />
 
+            <Button
+                android:id="@+id/button_open_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/open_camera_button" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />

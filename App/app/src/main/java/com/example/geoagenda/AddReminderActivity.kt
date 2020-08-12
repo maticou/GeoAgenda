@@ -10,9 +10,11 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.MediaStore
 import android.text.Html
 import android.text.format.DateFormat
 import android.util.AttributeSet
@@ -36,10 +38,13 @@ import com.example.geoagenda.ui.addlocation.Location
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_joingroup.*
 import kotlinx.android.synthetic.main.reminder_card.*
+import java.io.ByteArrayOutputStream
 import kotlin.time.milliseconds
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
+private const val REQUEST_IMAGE_CAPTURE = 1
+
 
 class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -47,7 +52,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var auth: FirebaseAuth
     private var recording: Boolean = true
     private var permissionToRecordAccepted = false
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private var recordingPath: String? = null
@@ -56,8 +61,12 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var preview: ImageView
     private  var imguri: Uri? = null
     private lateinit var dropMenu: AutoCompleteTextView
+    private lateinit var dropMenucat: AutoCompleteTextView
     private var locationsList = ArrayList<String>()
     private var locationsIdList = ArrayList<String>()
+    private var categoriesList = ArrayList<String>()
+    private var categoriesIdList = ArrayList<String>()
+    private var category: String = ""
     private lateinit var reminder: Reminder
     var day: Int = 0
     var month: Int = 0
@@ -80,6 +89,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         setContentView(R.layout.activity_add_reminder)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_GALLERY)
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_IMAGE_CAPTURE)
 
         //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
         val database = FirebaseDatabase.getInstance()
@@ -97,6 +107,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         //Este codigo se encarga de obtener las ubicaciones almacenadas en la base de datos
         val locations_ref = myRef.child(user?.uid.toString()).child("Ubicaciones")
+        //igual para las categorias
+        val categories_ref = myRef.child(user?.uid.toString()).child("Categorias")
 
         locations_ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -125,8 +137,35 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             }
         })
 
-        dropMenu = findViewById(R.id.filled_exposed_dropdown)
 
+        categories_ref.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                //error al obtener datos
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val values = snapshot.children
+                categoriesList.clear()
+                categoriesIdList.clear()
+
+                values.forEach {
+                    val data = it.value as HashMap<String, String>
+
+                    categoriesList.add(data.get("title").toString())
+                    categoriesIdList.add(data.get("id").toString())
+                }
+
+                //codigo para rellenar el campo de categoria
+                var categoryID = intent.getStringExtra("REMINDER_CATEGORY")
+                val categoryPosition = categoriesIdList.indexOf(categoryID)
+
+                if(categoryPosition != -1){
+                    dropMenucat.setText(categoriesList[categoryPosition], false)
+                }
+            }
+        })
+        dropMenu = findViewById(R.id.filled_exposed_dropdown)
+        dropMenucat = findViewById(R.id.filled_exposed_dropdown_cat)
 
         //Aqui se rellenan los formularios con los datos del recordatorio clickeado
         title_input.setText(intent.getStringExtra("REMINDER_TITLE"))
@@ -177,9 +216,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         var reminderRecording = ""
         var reminderImage = ""
 
-        //asociar id de categoria
-        var reminderCategory = ""
-
 
         //codigo encargado del menu desplegable para seleccionar una ubicacion
         val adapter = ArrayAdapter<String>(this, R.layout.drop_menu_item, locationsList )
@@ -190,6 +226,14 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.location = locationsIdList[position]
         }
 
+        //codigo encargado del menu desplegable para seleccionar una categoria
+        val adapter2 = ArrayAdapter<String>(this, R.layout.drop_menu_item, categoriesList )
+        dropMenucat.setAdapter(adapter2)
+        dropMenucat.onItemClickListener = AdapterView.OnItemClickListener{
+                parent,view, position, id->
+            //Toast.makeText(applicationContext,"Position : $position",Toast.LENGTH_SHORT).show()
+            reminder.category = categoriesIdList[position]
+        }
 
         //codigo para el boton de guardar
         save.setOnClickListener(){
@@ -214,7 +258,6 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             reminder.year = myYear.toString()
             reminder.hour = myHour.toString()
             reminder.minute = myMinute.toString()
-            reminder.category = reminderCategory
 
             myRef.child(user?.uid.toString()).child("Notas").child(reminder.id).setValue(reminder)
             if (!mNotified) {
@@ -299,6 +342,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             var openGallery = addImageDialog.findViewById(R.id.button_open_gallery) as Button
             var saveImage = addImageDialog.findViewById(R.id.button_save_image) as Button
             var discardImage = addImageDialog.findViewById(R.id.button_discard_image) as Button
+            var openCamera = addImageDialog.findViewById(R.id.button_open_camera) as Button
 
             openGallery.setOnClickListener{
                 val intentGaleria = Intent(Intent.ACTION_PICK)
@@ -328,8 +372,13 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
+
                 add_image.setImageDrawable(resources.getDrawable(R.drawable.ic_photo_green))
                 addImageDialog.dismiss()
+            }
+
+            openCamera.setOnClickListener {
+                dispatchTakePictureIntent()
             }
 
             discardImage.setOnClickListener {
@@ -438,6 +487,13 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             imguri = data!!.data
             preview.setImageURI(imguri)
         }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data!!.extras?.get("data") as Bitmap
+            imguri = getImageUriFromBitmap(this, imageBitmap)
+            //preview.setImageBitmap(imageBitmap)
+            //imguri = data!!.data
+            preview.setImageURI(imguri)
+        }
         else{
 
         }
@@ -468,4 +524,22 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         alarmButton.setImageDrawable(resources.getDrawable(R.drawable.ic_alarm_on))
     }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
+    }
+
+
+
 }

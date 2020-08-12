@@ -101,6 +101,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="ingresa_un_email">Ingresa un email</string>
     <string name="open_gallery_button">Abrir Galeria</string>
+    <string name="open_camera_button">Abrir Camara</string>
     <string name="save_image_button">Guardar</string>
     <string name="discard_image_button">Cancelar</string>
     <string name="unirse_a_un_grupo">Unirse a un grupo</string>
@@ -123,5 +124,8 @@
     <string name="notificationChannel">Este es el canal de notificaciones para la aplicación de recordatorios Mementos.</string>
 
 
+    <string name="play">Reproducir</string>
+    <string name="record">Grabar</string>
+    <string name="stop">Parar</string>
 
 </resources>
