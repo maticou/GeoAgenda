@@ -10,9 +10,11 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.MediaStore
 import android.text.Html
 import android.text.format.DateFormat
 import android.util.AttributeSet
@@ -36,10 +38,13 @@ import com.example.geoagenda.ui.addlocation.Location
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_joingroup.*
 import kotlinx.android.synthetic.main.reminder_card.*
+import java.io.ByteArrayOutputStream
 import kotlin.time.milliseconds
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
+private const val REQUEST_IMAGE_CAPTURE = 1
+
 
 class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -47,7 +52,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     private lateinit var auth: FirebaseAuth
     private var recording: Boolean = true
     private var permissionToRecordAccepted = false
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE)
+    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
     private var recorder: MediaRecorder? = null
     private var player: MediaPlayer? = null
     private var recordingPath: String? = null
@@ -84,6 +89,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         setContentView(R.layout.activity_add_reminder)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_GALLERY)
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_IMAGE_CAPTURE)
 
         //Valores donde se indica donde se encuentra la base de datos y el almacenamiento de los datos del usuario
         val database = FirebaseDatabase.getInstance()
@@ -336,6 +342,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             var openGallery = addImageDialog.findViewById(R.id.button_open_gallery) as Button
             var saveImage = addImageDialog.findViewById(R.id.button_save_image) as Button
             var discardImage = addImageDialog.findViewById(R.id.button_discard_image) as Button
+            var openCamera = addImageDialog.findViewById(R.id.button_open_camera) as Button
 
             openGallery.setOnClickListener{
                 val intentGaleria = Intent(Intent.ACTION_PICK)
@@ -355,8 +362,13 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 }.addOnSuccessListener {
                     println("El archivo se ha subido correctamente")
                 }
+
                 add_image.setImageDrawable(resources.getDrawable(R.drawable.ic_photo_green))
                 addImageDialog.dismiss()
+            }
+
+            openCamera.setOnClickListener {
+                dispatchTakePictureIntent()
             }
 
             discardImage.setOnClickListener {
@@ -465,6 +477,13 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             imguri = data!!.data
             preview.setImageURI(imguri)
         }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data!!.extras?.get("data") as Bitmap
+            imguri = getImageUriFromBitmap(this, imageBitmap)
+            //preview.setImageBitmap(imageBitmap)
+            //imguri = data!!.data
+            preview.setImageURI(imguri)
+        }
         else{
 
         }
@@ -495,4 +514,22 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         alarmButton.setImageDrawable(resources.getDrawable(R.drawable.ic_alarm_on))
     }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    fun getImageUriFromBitmap(context: Context, bitmap: Bitmap): Uri{
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path.toString())
+    }
+
+
+
 }
