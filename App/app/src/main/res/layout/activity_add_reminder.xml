@@ -139,6 +139,19 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Descartar" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/delete_reminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorExit"
+                    android:text="@string/menu_locations_delete" />
             </LinearLayout>
 
             <Space

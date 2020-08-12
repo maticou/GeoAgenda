@@ -26,10 +26,6 @@ import androidx.core.app.ActivityCompat
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
 import java.io.File
@@ -37,6 +33,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.HashMap
 import com.example.geoagenda.ui.addlocation.Location
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_joingroup.*
 import kotlinx.android.synthetic.main.reminder_card.*
 import kotlin.time.milliseconds
@@ -72,6 +69,7 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     var myYear: Int = 0
     var myHour: Int = 0
     var myMinute: Int = 0
+    var deleteOption: String = "FALSE"
     private var mNotificationTime: Long = 0
     private var mNotified = false
     private var tiempoTotal: Long = 0
@@ -135,7 +133,9 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         note_input.setText(intent.getStringExtra("REMINDER_NOTE"))
         recordingPath = intent.getStringExtra("REMINDER_AUDIO")
         imagePath = intent.getStringExtra("REMINDER_IMAGE")
-
+        if(!intent.getStringExtra("REMINDER_DELETE_OPTION").isNullOrEmpty()){
+            deleteOption = intent.getStringExtra("REMINDER_DELETE_OPTION")
+        }
         if(!intent.getStringExtra("REMINDER_DAY").isNullOrEmpty()){
             myDay = intent.getStringExtra("REMINDER_DAY").toInt()
         }
@@ -334,6 +334,25 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         alarmButton.setOnClickListener {
             tiempoTotal = 0
             showDateTimeDialog()
+        }
+
+        delete_reminder.setOnClickListener {
+            if(deleteOption == "TRUE") {
+                val deleteRef = database.getReferenceFromUrl("https://mementos-da7d9.firebaseio.com/${user?.uid.toString()}/Notas/")
+                val reminderQuery: Query = deleteRef.orderByChild("id").equalTo(reminderID)
+                reminderQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (reminderSnapshot in dataSnapshot.children) {
+                            reminderSnapshot.ref.removeValue()
+                            onBackPressed()
+                        }
+                    }
+                })
+            }
         }
     }
 
