@@ -75,8 +75,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
         val bundle: Bundle? = intent.extras
         val avatar = bundle?.getString( "avatar")
         val userAvatar = userAvatarimageView.findViewById<ImageView>(R.id.userAvatarimageView)

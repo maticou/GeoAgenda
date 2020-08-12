@@ -123,5 +123,8 @@
     <string name="notificationChannel">Este es el canal de notificaciones para la aplicación de recordatorios Mementos.</string>
 
 
+    <string name="play">Reproducir</string>
+    <string name="record">Grabar</string>
+    <string name="stop">Parar</string>
 
 </resources>
