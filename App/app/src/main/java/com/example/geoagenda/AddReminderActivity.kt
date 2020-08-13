@@ -2,24 +2,23 @@ package com.example.geoagenda
 
 
 import android.Manifest
-import android.app.*
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.MediaStore
 import android.text.Html
 import android.text.format.DateFormat
-import android.util.AttributeSet
-import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -28,18 +27,13 @@ import androidx.core.app.ActivityCompat
 import com.example.geoagenda.ui.reminder.Reminder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_add_reminder.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlin.collections.HashMap
-import com.example.geoagenda.ui.addlocation.Location
-import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_joingroup.*
-import kotlinx.android.synthetic.main.reminder_card.*
-import java.io.ByteArrayOutputStream
-import kotlin.time.milliseconds
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val REQUEST_GALLERY = 2
@@ -489,7 +483,8 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data!!.extras?.get("data") as Bitmap
-            imguri = getImageUriFromBitmap(this, imageBitmap)
+            val resized = Bitmap.createScaledBitmap(imageBitmap, 1300, 1800, true)
+            imguri = getImageUriFromBitmap(this, resized)
             //preview.setImageBitmap(imageBitmap)
             //imguri = data!!.data
             preview.setImageURI(imguri)
