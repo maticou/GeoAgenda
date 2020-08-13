@@ -1,19 +1,25 @@
 package com.example.geoagenda.ui.reminder
 
+import android.content.ContentValues.TAG
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.geoagenda.R
-import kotlinx.android.synthetic.main.reminder_card.*
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.reminder_card.view.*
-import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
+
 
 class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: OnReminderItemClickListener) : RecyclerView.Adapter<ReminderViewAdapter.ReminderViewHolder>(){
 
@@ -43,7 +49,19 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
         val locationIcon: ImageView = reminderCard.location_icon
 
         fun initialize(item: Reminder, action: OnReminderItemClickListener) {
-            image.setImageURI(Uri.parse(item.image))
+            //image.setImageURI(Uri.parse(getBitmapFromURL(item.image)))
+            //image.setImageURI(Uri.parse(item.image))
+            Picasso.get()
+                .load(item.image)
+                .into(image, object : Callback {
+                    override fun onSuccess() {
+                        Log.d(TAG, "success")
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Log.d(TAG, "error")
+                    }
+                })
             title.text = item.title
             note.text = item.note
             if (item.month != "0") {
@@ -65,6 +83,23 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
                 action.onItemClick(item, absoluteAdapterPosition)
             }
         }
+
+        private fun getBitmapFromURL(image: String): String? {
+            return try {
+                val url = URL(image)
+                val connection: HttpURLConnection = url
+                    .openConnection() as HttpURLConnection
+                connection.setDoInput(true)
+                connection.connect()
+                val input: InputStream = connection.getInputStream()
+                BitmapFactory.decodeStream(input).toString()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
+        }
+
+
     }
 
     interface OnReminderItemClickListener {
@@ -72,4 +107,5 @@ class ReminderViewAdapter(val reminderList: List<Reminder>, var clickListener: O
 
         }
     }
+
 }

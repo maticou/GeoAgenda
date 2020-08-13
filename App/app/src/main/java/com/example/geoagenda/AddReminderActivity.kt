@@ -539,7 +539,4 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
-
-
-
 }
