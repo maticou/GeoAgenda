@@ -356,7 +356,17 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                 //val imageRef = storageRef.child("${user?.uid.toString()}/Image/${image_preview.lastPathSegment}")
                 val imageRef = storageRef.child("${user?.uid.toString()}/Imagen/"+ UUID.randomUUID().toString())
                 reminderImage = "${externalCacheDir?.absolutePath}/${reminderID}.jpg"
-                var uploadTask = imageRef.putFile(imguri!!)
+
+                var uploadTask = imageRef.putFile(imguri!!).addOnSuccessListener { taskSnapshot ->
+                    imageRef.downloadUrl.addOnCompleteListener { taskSnapshot ->
+
+                        var url = taskSnapshot.result
+                        reminderImage = url.toString()
+
+                        println ("url =" + url.toString ())
+                    }
+                }
+
                 uploadTask.addOnFailureListener {
                     println("Ocurrio un error al subir el archivo")
                 }.addOnSuccessListener {
@@ -529,7 +539,4 @@ class AddReminderActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
         return Uri.parse(path.toString())
     }
-
-
-
 }
