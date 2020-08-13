@@ -71,5 +71,11 @@
         android:label="Unirse a un grupo"
         tools:layout="@layout/fragment_joingroup" />
 
+    <fragment
+        android:id="@+id/delete_group"
+        android:name="com.example.geoagenda.ui.deletegroup.DeleteGroupFragment"
+        android:label="Eliminar un grupo administrado"
+        tools:layout="@layout/fragment_deletegroup" />
+
 
 </navigation>
