@@ -48,7 +48,7 @@
     <string name="prefs_file">com.example.geoagenda.PREFERENCE_FILE_KEY</string>
 
     <string name="home_second">Home Second</string>
-    <string name="google_maps_key">AIzaSyB09JWcQnsei1k5LS2jn0Z3UBd4poMALLs</string>
+    <string name="google_maps_key">Poner la API KEY en algun archivo oculto</string>
     <string name="string">Nombre</string>
     <string name="string2">Nueva Ubicación</string>
     <string name="string_agregar">Agregar</string>
